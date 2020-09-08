@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Compras-Ventas</title>
+                <h:outputStylesheet name="/css/personalizado.css"/>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit style="font-size: 25px"  position="north" resizable="true" closable="true" collapsible="true" class="NortSout">
+                    COMPRAS - VENTAS
+                </p:layoutUnit>
+
+                <p:layoutUnit style="font-size: 13px" position="south"  closable="true" collapsible="true" class="NortSout">
+                    &copy; 2019 MAKROTECH COMPUTERS
+                    <br/>
+                    Estamos ubicado en: Provincia Bolivar, Canton Guaranda, Calles Candido Rada y Joaquin Galarza
+                    <br/>
+                    Propietario: Gabriel 0999295799, 
+                    Telefonos: 0000000
+                    <br/>
+                    Elaborado por: William Chimborazo, Telefono: 0958978837
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <h:form>
+                        <div class="ui-fluid">
+                            <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                            <h:panelGrid width="100%" columns="3" columnClasses="ui-g-12 ui-md-5, ui-g-12 ui-md-3, ui-g-12 ui-md-4" cellpadding="5">
+                                <p:outputLabel value=""/>
+                                <p:panel header="COMPRA-VENTAS">
+                                    <h:panelGrid columns="2" >
+                                        <p:outputLabel value="Usuario: " for="user" />
+                                        <p:inputText id="user" value="#{loginController.username}" placeholder="Usuario" required="true" label="Usuario"
+                                                     requiredMessage="Escriba el nombre del usuario" autocomplete="off"/>
+                                        <p:outputLabel value="Contraseña" for="passwd" />
+                                        <p:password id="passwd" value="#{loginController.contrasenia}" placeholder="Password" required="true" label="password"
+                                                    requiredMessage="Escriba el password"/>
+
+                                        <f:facet name="footer">
+                                            <p:commandButton icon="ui-icon-key" value="Ingresar" update="growl,user,passwd" action="#{loginController.autenticarUsuario()}"
+                                                             process="@this,user,passwd"
+                                                             oncomplete="handleLoginRequest(xhr, status, args)" />
+                                        </f:facet> 
+                                    </h:panelGrid>
+                                    <p:separator />
+                                    <h:link value="Crear cuenta" outcome="/views/personal/cliente" />
+                                    <br />
+                                    <h:link value="Olvidé mi contraseña! " outcome="/views/producto/categoria" />
+                                </p:panel>
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+
+
+</html>
+

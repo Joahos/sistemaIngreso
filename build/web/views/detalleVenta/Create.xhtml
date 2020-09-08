@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetalleVentaCreateDlg" widgetVar="DetalleVentaCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{mensajes.CreateDetalleVentaTitle}">
+            <h:form id="DetalleVentaCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{detalleVentaController.selected != null}">
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_iddetalleventa}" for="iddetalleventa" />
+                        <p:inputText id="iddetalleventa" value="#{detalleVentaController.selected.iddetalleventa}" title="#{mensajes.CreateDetalleVentaTitle_iddetalleventa}" required="true" requiredMessage="#{mensajes.CreateDetalleVentaRequiredMessage_iddetalleventa}"/>
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_numeroventa}" for="numeroventa" />
+                        <p:inputText id="numeroventa" value="#{detalleVentaController.selected.numeroventa}" title="#{mensajes.CreateDetalleVentaTitle_numeroventa}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_cedulacliente}" for="cedulacliente" />
+                        <p:inputText id="cedulacliente" value="#{detalleVentaController.selected.cedulacliente}" title="#{mensajes.CreateDetalleVentaTitle_cedulacliente}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_producto}" for="producto" />
+                        <p:inputText id="producto" value="#{detalleVentaController.selected.producto}" title="#{mensajes.CreateDetalleVentaTitle_producto}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{detalleVentaController.selected.moneda}" title="#{mensajes.CreateDetalleVentaTitle_moneda}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_precioventa}" for="precioventa" />
+                        <p:inputText id="precioventa" value="#{detalleVentaController.selected.precioventa}" title="#{mensajes.CreateDetalleVentaTitle_precioventa}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_cantidadventa}" for="cantidadventa" />
+                        <p:inputText id="cantidadventa" value="#{detalleVentaController.selected.cantidadventa}" title="#{mensajes.CreateDetalleVentaTitle_cantidadventa}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_descuento}" for="descuento" />
+                        <p:inputText id="descuento" value="#{detalleVentaController.selected.descuento}" title="#{mensajes.CreateDetalleVentaTitle_descuento}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_importe}" for="importe" />
+                        <p:inputText id="importe" value="#{detalleVentaController.selected.importe}" title="#{mensajes.CreateDetalleVentaTitle_importe}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_fechaventa}" for="fechaventa" />
+                        <p:calendar id="fechaventa" pattern="MM/dd/yyyy" value="#{detalleVentaController.selected.fechaventa}" title="#{mensajes.EditDetalleVentaTitle_fechaventa}"  showOn="button"/>
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_estado}" for="estado" />
+                        <p:selectBooleanCheckbox id="estado" value="#{detalleVentaController.selected.estado}" />
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_idcliente}" for="idcliente" />
+                        <p:selectOneMenu id="idcliente" value="#{detalleVentaController.selected.idcliente}" required="true" requiredMessage="#{mensajes.EditDetalleVentaRequiredMessage_idcliente}">
+                            <f:selectItems value="#{clienteController.itemsAvailableSelectOne}"
+                                           var="idclienteItem"
+                                           itemValue="#{idclienteItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_idproducto}" for="idproducto" />
+                        <p:selectOneMenu id="idproducto" value="#{detalleVentaController.selected.idproducto}" required="true" requiredMessage="#{mensajes.EditDetalleVentaRequiredMessage_idproducto}">
+                            <f:selectItems value="#{productoController.itemsAvailableSelectOne}"
+                                           var="idproductoItem"
+                                           itemValue="#{idproductoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_idusuarios}" for="idusuarios" />
+                        <p:selectOneMenu id="idusuarios" value="#{detalleVentaController.selected.idusuarios}" required="true" requiredMessage="#{mensajes.EditDetalleVentaRequiredMessage_idusuarios}">
+                            <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                           var="idusuariosItem"
+                                           itemValue="#{idusuariosItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{detalleVentaController.create}" value="#{mensajes.Save}" update="display,:DetalleVentaListForm:datalist,:growl" oncomplete="handleSubmit(args,'DetalleVentaCreateDialog');"/>
+                    <p:commandButton value="#{mensajes.Cancel}" onclick="DetalleVentaCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

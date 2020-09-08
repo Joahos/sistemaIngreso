@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <div class="ui-g" style="justify-content: center">
+                    <div class="ui-lg-5" >
+                        <h:form id="formListCateg">
+                            <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="2000"/>
+
+                            <p:panel header="Categorias inactivas" >
+
+                                <p:dataTable  id="nominaCateg" value="#{categoriaController.listarCatInactivas}" var="item"
+                                              selectionMode="single" selection="#{categoriaController.categoriaActual}"
+                                              paginator="true"
+                                              rowKey="#{item.idcategoria}"
+                                              rows="10"
+                                              rowsPerPageTemplate="10,20,30"
+                                              >
+
+                                    <p:ajax event="rowSelect"   update="btnEdit"/>
+                                    <p:ajax event="rowUnselect" update="btnEdit"/>
+                                    <p:column style="width: 20%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Clave"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idcategoria}"/>
+                                    </p:column>
+                                    <p:column style="width: 55%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Categorias"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.categoria}"/>
+                                    </p:column>
+
+                                    <p:column style="width: 20%; text-align: center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Activar"/>
+                                        </f:facet>
+                                        <p:commandButton id="btnEdit" style="width: 45%"
+                                                         action="#{categoriaController.activarCateg(item)}"
+                                                         title="Activar" icon="ui-icon-check"
+                                                         process="@this" partialSubmit="true"
+                                                         update=":formListCateg:msmGrowl, :formListCateg:nominaCateg"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+                        </h:form>
+                    </div>
+                    <div class="ui-lg-5" >
+                        <h:form id="formListProduct">
+                            <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="2000"/>
+
+                            <p:panel header="Productos inactivos" >
+                               
+                                <p:dataTable  id="listaProduct" value="#{productoController.listarProdInactivo}" var="item"
+                                              selectionMode="single" selection="#{productoController.selected}"
+                                              paginator="true"
+                                              rowKey="#{item.idproducto}"
+                                              rows="10"
+                                              rowsPerPageTemplate="10,20,30"
+                                              >
+
+                                    <p:ajax event="rowSelect"   update="btnEdit"/>
+                                    <p:ajax event="rowUnselect" update="btnEdit"/>
+
+                                    <p:column style="width: 20%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Codigo"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idproducto}"/>
+                                    </p:column>
+                                    
+                                    <p:column style="width: 55%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Nombre"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.producto}"/>
+                                    </p:column>
+                                    
+                                    <p:column style="width: 20%; text-align: center">
+                                        <f:facet name="header">
+                                            <h:outputText value="Activar"/>
+                                        </f:facet>
+                                        <p:commandButton id="btnEdit" style="width: 45%"
+                                                         action="#{productoController.activarProducto(item)}"
+                                                         title="Activar" icon="ui-icon-check"
+                                                         process="@this" partialSubmit="true"
+                                                         update=":formListProduct:msmGrowl, :formListProduct:listaProduct"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

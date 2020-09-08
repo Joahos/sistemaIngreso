@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="formListUser">
+                    <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="6000"/>
+
+                    <p:panel header="Nomina de usuarios" >
+                        <!--                        <p:panelGrid id="pnlMostrarPersona" columns="3" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" >-->
+
+                        <p:dataTable  id="nominaUser" value="#{usuariosController.listaUsuarios}" var="varUs"
+                                      selectionMode="single" selection="#{usuariosController.usuarioActual}"
+                                      paginator="true"
+                                      rowKey="#{varUs.idusuarios}"
+                                      rows="10"
+                                      rowsPerPageTemplate="10,20,30"
+                                      >
+
+                            <p:ajax event="rowSelect"   update="btnCreate btnView btnEdit btnDelete btnReset"/>
+                            <p:ajax event="rowUnselect" update="btnCreate btnView btnEdit btnDelete btnReset"/>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="Cedula"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.cedula}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombres"/>
+                                </f:facet>
+                                <h:outputText value="#{ varUs.apellidos}    #{varUs.nombres}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="Telefono"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.telefono}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Correo"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.correo}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Direccion"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.direccion}"/>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnCreate" icon="ui-icon-plus"   value="Nuevo" title="Crear" 
+                                                 actionListener="#{usuariosController.prepareCreate}" 
+                                                 update=":formCreateUser" 
+                                                 oncomplete="PF('widCreateUser').show()"/>
+
+                                <p:commandButton id="btnEdit"   icon="ui-icon-pencil" value="Editar" title="Editar" 
+                                                 disabled="#{empty usuariosController.usuarioActual}" 
+                                                 update=":formEditUser" 
+                                                 oncomplete="PF('widEditUser').show()" />
+
+                                <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
+                                                 disabled="#{empty usuariosController.usuarioActual}"
+                                                 update=":formViewUser" 
+                                                 oncomplete="PF('widViewUser').show()" />
+
+                                <p:commandButton id="btnDelete" icon="ui-icon-trash"  value="Eliminar" title="Eliminar"
+                                                 disabled="#{empty usuariosController.usuarioActual}"
+                                                 update=":formBorrarUser" 
+                                                 oncomplete="PF('widEraseUser').show()" />
+                                <p:commandButton id="btnReset" icon="ui-icon-arrowrefresh-1-n"  value="Resetear" title="Resetear contraseña"
+                                                 disabled="#{empty usuariosController.usuarioActual}"
+                                                 update=":formReserUserPass" 
+                                                 oncomplete="PF('widReserUserPass').show()" />
+
+                            </f:facet>
+
+                        </p:dataTable>
+                        <!--                            </p:panelGrid>-->
+                    </p:panel>
+                </h:form>
+
+                <p:dialog id="dlgCreateUser" widgetVar="widCreateUser" modal="true" resizable="false" 
+                          appendTo="@(body)" header="CREAR USUARIO" showEffect="explode" hideEffect="explode">
+
+                    <h:form id="formCreateUser">
+                        <h:panelGroup id="display">
+                            <p:panelGrid id="pnlPersona" columns="2" rendered="#{usuariosController.usuarioActual != null}">
+
+                                <p:outputLabel value="Cedula" for="cedula" />
+                                <p:inputText id="cedula" value="#{usuariosController.usuarioActual.cedula}" title="Cedula" >
+                                    <p:ajax listener="#{usuariosController.validarCedula()}" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Nombres" for="nombres" />
+                                <p:inputText id="nombres" value="#{usuariosController.usuarioActual.nombres}" title="Nombres" />
+
+                                <p:outputLabel value="Apellidos" for="apellidos" />
+                                <p:inputText id="apellidos" value="#{usuariosController.usuarioActual.apellidos}" title="Apellidos" />
+
+                                <p:outputLabel value="Telefono" for="telefono" />
+                                <p:inputText id="telefono" value="#{usuariosController.usuarioActual.telefono}" title="Telefono" />
+
+                                <p:outputLabel value="Correo" for="correo" />
+                                <p:inputText id="correo" value="#{usuariosController.usuarioActual.correo}" title="Correo" />
+
+                                <p:outputLabel value="Direccion" for="direccion" />
+                                <p:inputText id="direccion" value="#{usuariosController.usuarioActual.direccion}" title="Direccion" />
+
+                                <p:outputLabel value="Usuario" for="usuario" />
+                                <p:inputText id="usuario" value="#{usuariosController.usuarioActual.usuario}" title="Usuario" />
+
+
+
+                                <h:outputText value="Contraseña: " />
+                                <p:password id="paswword" value="#{usuariosController.password}" feedback="true" 
+                                            promptLabel="Vacio" weakLabel="Debil" goodLabel="Medio" strongLabel="Fuerte"
+                                            required="true"/>
+
+                                <p:outputLabel value="Repita contraseña" for="password2" />
+                                <p:password id="password2" value="#{usuariosController.password2}" feedback="true" 
+                                            promptLabel="Vacio" weakLabel="Debil" goodLabel="Medio" strongLabel="Fuerte"
+                                            required="true"/>
+
+
+
+                                <p:outputLabel value="Fecha ingreso" for="fechaingreso" />
+                                <p:calendar id="fechaingreso" pattern="MM/dd/yyyy" value="#{usuariosController.usuarioActual.fechaingreso}" title="Fecha ingreso"  showOn="button"/>
+
+                                <p:outputLabel value="Empresa" for="idempresa" />
+                                <p:selectOneMenu id="idempresa" value="#{usuariosController.usuarioActual.idempresa}" required="true" >
+                                    <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"
+                                                   var="idempresaItem"
+                                                   itemLabel="#{idempresaItem.nombreempresa}"
+                                                   itemValue="#{idempresaItem}"/>
+                                </p:selectOneMenu>
+                                
+                                
+                                
+                                <p:outputLabel value="Permiso" for="idPermisos" />
+                                <p:selectOneMenu id="idPermisos" value="#{usuariosController.perm}" required="true" >
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne2}"
+                                                   var="idPerm"
+                                                   itemLabel="#{idPerm.nombre}"
+                                                   itemValue="#{idPerm}"
+                                                 />    
+                                    <p:ajax event="change" listener="#{usuariosController.prueba}" update="idUsPerm"/>
+                                </p:selectOneMenu>
+                                
+                                
+                                
+                                
+                                <p:outputLabel value="Usuario Permisos" for="idUsPerm" />
+                                <p:selectOneMenu id="idUsPerm" value="#{usuariosController.usPerm}" required="true" >
+                                    <f:selectItems value="#{usuariosController.listUsPerm}"
+                                                   var="usPermi"
+                                                   itemLabel="#{usPermi.idusuarios.apellidos}"
+                                                   itemValue="#{usPermi}"/>
+                                </p:selectOneMenu>
+                                
+                                
+
+
+                                
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"  
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                 onclick="widCreateUser.hide()"
+                                                 action="#{usuariosController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" value="Guardar" 
+                                                 actionListener="#{usuariosController.create}"
+                                                 process="@this,pnlPersona" partialSubmit="true"
+                                                 update=":formListUser:msmGrowl,:formListUser:nominaUser"
+                                                 oncomplete="PF('widCreateUser').hide();"/>
+                            </p:fieldset>
+
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="UsuariosEditDlg" widgetVar="widEditUser" modal="true" resizable="false" appendTo="@(body)" header="EDITAR USUARIO">
+                    <h:form id="formEditUser">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{usuariosController.usuarioActual != null}">
+
+                                <p:outputLabel value="Cedula" for="cedula" />
+                                <p:inputText id="cedula" value="#{usuariosController.usuarioActual.cedula}" title="Cedula" 
+                                             readonly="true"/>
+
+                                <p:outputLabel value="Nombres" for="nombres" />
+                                <p:inputText id="nombres" value="#{usuariosController.usuarioActual.nombres}" title="Nombres" />
+
+                                <p:outputLabel value="Apellidos" for="apellidos" />
+                                <p:inputText id="apellidos" value="#{usuariosController.usuarioActual.apellidos}" title="Apellidos" />
+
+                                <p:outputLabel value="Telefono" for="telefono" />
+                                <p:inputText id="telefono" value="#{usuariosController.usuarioActual.telefono}" title="Telefono" />
+
+                                <p:outputLabel value="Correo" for="correo" />
+                                <p:inputText id="correo" value="#{usuariosController.usuarioActual.correo}" title="Correo" />
+
+                                <p:outputLabel value="Direccion" for="direccion" />
+                                <p:inputText id="direccion" value="#{usuariosController.usuarioActual.direccion}" title="Direccion" />
+
+                                <p:outputLabel value="Cargo" for="cargo" />
+                                <p:selectBooleanCheckbox id="cargo" value="#{usuariosController.usuarioActual.cargo}" />
+
+                                <p:outputLabel value="Fecha de ingreso" for="fechaingreso" />
+                                <p:calendar id="fechaingreso" pattern="MM/dd/yyyy" value="#{usuariosController.usuarioActual.fechaingreso}" title="Fecha de Ingreso"  showOn="button"/>
+
+                                <p:outputLabel value="Empresa" for="idempresa" />
+                                <p:selectOneMenu id="idempresa" value="#{usuariosController.usuarioActual.idempresa}" required="true" >
+                                    <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"
+                                                   var="idempresaItem"
+                                                   itemLabel="#{idempresaItem.nombreempresa}"
+                                                   itemValue="#{idempresaItem}"/>
+                                </p:selectOneMenu>
+                                
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                 onclick="widEditUser.hide()"
+                                                 action="#{usuariosController.limpiarObjeto()}"/>
+                                
+                                <p:commandButton icon="ui-icon-disk" actionListener="#{usuariosController.update}" 
+                                                 value="Guardar" update=":formListUser:msmGrowl, :formListUser:nominaUser" 
+                                                 oncomplete="PF('widEditUser').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="UsuariosViewDlg" widgetVar="widViewUser" modal="true" resizable="false" appendTo="@(body)" header="USUARIOS">
+                    <h:form id="formViewUser">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{usuariosController.usuarioActual != null}">
+
+                                <h:outputText value="#{mensajes.ViewUsuariosLabel_cedula}"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.cedula}" />
+
+                                <h:outputText value="Apellidos"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.apellidos}"/>
+
+                                <h:outputText value="Nombres"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.nombres}" />
+
+                                <h:outputText value="Telefono"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.telefono}"/>
+
+                                <h:outputText value="Correo"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.correo}" />
+
+                                <h:outputText value="Direccion"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.direccion}"/>
+
+                                <h:outputText value="Cargo"/>
+                                <p:selectBooleanCheckbox value="#{usuariosController.usuarioActual.cargo}" disabled="true"/>
+
+                                <h:outputText value="Usuario"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.usuario}" />
+
+                                <h:outputText value="Fecha"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.fechaingreso}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                                </h:outputText>
+
+                                <h:outputText value="Empresa"/>
+                                <h:outputText value="#{usuariosController.usuarioActual.idempresa.nombreempresa}" />
+                                
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+
+                                <h:form>
+                                    <p:commandButton icon=" ui-icon-close" value="Cerrar" 
+                                                     process="@this" partialSubmit="true"
+                                                     update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                     onclick="widViewUser.hide()"
+                                                     action="#{usuariosController.limpiarObjeto()}"/>
+                                </h:form>
+                            </p:fieldset>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="formEraseUser" widgetVar="widEraseUser" modal="true" resizable="false" 
+                          appendTo="@(body)" header="ELIMINAR USUARIO"
+                          showEffect="explode" hideEffect="explode">
+                    <h:form id="formBorrarUser">
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="1" rendered="#{usuariosController.usuarioActual != null}">
+                                Esta seguro de eliminar el usuario: 
+
+                                #{usuariosController.usuarioActual.apellidos}
+                            </p:panelGrid>
+                            <p:fieldset style="text-align: center; padding: 0px">
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" 
+                                                 process="@this" partialSubmit="true" 
+                                                 update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                 onclick="widEraseUser.hide()"
+                                                 action="#{usuariosController.limpiarObjeto()}"/>
+
+                                <p:commandButton  icon="ui-icon-trash"
+                                                  actionListener="#{usuariosController.eraseLog()}" 
+                                                  value="Eliminar" update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                  oncomplete="PF('widEraseUser').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="formReserUserPass" widgetVar="widReserUserPass" modal="true" resizable="false" 
+                          appendTo="@(body)" header="RESETEAR CONTRASEÑA"
+                          showEffect="explode" hideEffect="explode">
+                    <h:form id="formResetUserPass">
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="1" rendered="#{usuariosController.usuarioActual != null}">
+                                Esta seguro de resetear usuario y contraseña de:  
+
+                                #{usuariosController.usuarioActual.apellidos}
+                            </p:panelGrid>
+                            <p:fieldset style="text-align: center; padding: 0px">
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" process="@this" partialSubmit="true"
+                                                 update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                 onclick="widReserUserPass.hide()"
+                                                 action="#{usuariosController.limpiarObjeto()}"/>
+
+                                <p:commandButton  icon="ui-icon-arrowrefresh-1-n"
+                                                  actionListener="#{usuariosController.resetPassword()}" 
+                                                  value="Resetear" update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                  oncomplete="PF('widReserUserPass').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

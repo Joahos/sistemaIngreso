@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ComprasEditDlg" widgetVar="ComprasEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{mensajes.EditComprasTitle}">
+            <h:form id="ComprasEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{comprasController.compraActual != null}">
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_idcompras}" for="idcompras" />
+                        <p:inputText id="idcompras" value="#{comprasController.compraActual.idcompras}" title="#{mensajes.EditComprasTitle_idcompras}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idcompras}"/>
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_fechacompra}" for="fechacompra" />
+                        <p:calendar id="fechacompra" pattern="MM/dd/yyyy" value="#{comprasController.compraActual.fechacompra}" title="#{mensajes.EditComprasTitle_fechacompra}"  showOn="button"/>
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_numerocompra}" for="numerocompra" />
+                        <p:inputText id="numerocompra" value="#{comprasController.compraActual.numerocompra}" title="#{mensajes.EditComprasTitle_numerocompra}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_proveedor}" for="proveedor" />
+                        <p:inputText id="proveedor" value="#{comprasController.compraActual.proveedor}" title="#{mensajes.EditComprasTitle_proveedor}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_cedulaproveedor}" for="cedulaproveedor" />
+                        <p:inputText id="cedulaproveedor" value="#{comprasController.compraActual.cedulaproveedor}" title="#{mensajes.EditComprasTitle_cedulaproveedor}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_comprador}" for="comprador" />
+                        <p:inputText id="comprador" value="#{comprasController.compraActual.comprador}" title="#{mensajes.EditComprasTitle_comprador}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{comprasController.compraActual.moneda}" title="#{mensajes.EditComprasTitle_moneda}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_subtotal}" for="subtotal" />
+                        <p:inputText id="subtotal" value="#{comprasController.compraActual.subtotal}" title="#{mensajes.EditComprasTitle_subtotal}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_totaliva}" for="totaliva" />
+                        <p:inputText id="totaliva" value="#{comprasController.compraActual.totaliva}" title="#{mensajes.EditComprasTitle_totaliva}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_total}" for="total" />
+                        <p:inputText id="total" value="#{comprasController.compraActual.total}" title="#{mensajes.EditComprasTitle_total}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_tipopago}" for="tipopago" />
+                        <p:inputText id="tipopago" value="#{comprasController.compraActual.tipopago}" title="#{mensajes.EditComprasTitle_tipopago}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_estado}" for="estado" />
+                        <p:selectBooleanCheckbox id="estado" value="#{comprasController.compraActual.estado}" />
+                        <p:outputLabel value="#{mensajes.EditComprasLabel_idproveedor}" for="idproveedor" />
+                        <p:selectOneMenu id="idproveedor" value="#{comprasController.compraActual.idproveedor}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idproveedor}">
+                            <f:selectItem itemLabel="#{mensajes.SelectOneMessage}"/>
+                            <f:selectItems value="#{proveedorController.itemsAvailableSelectOne}"
+                                           var="idproveedorItem"
+                                           itemValue="#{idproveedorItem}"/>
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{comprasController.update}" value="#{mensajes.Save}" update="display,:ComprasListForm:datalist" oncomplete="handleSubmit(args, 'ComprasEditDialog');"/>
+                    <p:commandButton value="#{mensajes.Cancel}" onclick="ComprasEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,355 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="btnAct">
+                    REALIZAR COMPRA
+                    <p:separator/>
+                    <h:panelGrid columns="3" style="margin: 0px">
+                        <p:commandButton value="Nueva compra" actionListener="#{comprasController.numeracionFactura()}"
+                                         update=":formFactura,:btnAct,:formFactura:btnImprimir1" action="#{comprasController.enableButton()}"
+                                         />
+                        <p:commandButton value="Consultar compras" actionListener="#{comprasController.numeracionFactura()}"
+                                         update=":formFactura"
+                                         />
+
+                        <p:commandButton value="Buscar proveedor" oncomplete="PF('dialogProveedor').show();" 
+                                         update=":formFactura:dlgClientes" disabled="#{!comprasController.enabled}"
+                                         />
+
+                    </h:panelGrid>
+                </h:form>
+
+                <h:form id="formFactura">
+                    <p:growl id="mensajeGeneral" showDetail="true" life="3000"/>
+
+                    <p:panel header="-*-" style="width: 99%; margin: 0 auto; text-align: center;" id="Comprovante">
+                        <p:layout id="capaDatosClienteFactura" style="width: 100%; height: 125px;">
+                            <p:layoutUnit id="datosCliente" position="center" style="padding: 5px; text-align: justify;
+                                          font-size: 14px;" size="300">
+
+                                <h:panelGrid id="gridBuscarDatosCliente" columns="4" style="width: 98%; text-align: left">
+                                    <p:outputLabel value="RUC: " style="font-weight: bold; width: 15%; "/>
+                                    <p:outputLabel value="#{comprasController.proveedorActual.cedula}" style="width: 33%"/>
+                                    <p:outputLabel value="Fecha: " style="font-weight: bold; width: 15%"/>
+                                    <p:outputLabel value="#{comprasController.fechaSistema}" style="width: 33%"/>                                                     
+                                    <p:outputLabel value="Rason social: " style="font-weight: bold;"/>
+                                    <p:outputLabel value="#{comprasController.proveedorActual.razonzocial}"/>
+                                    <p:outputLabel value="Direccion: " style="font-weight: bold;"/>
+                                    <p:outputLabel  value="#{comprasController.proveedorActual.direccion}"/>                                                       
+                                </h:panelGrid>  
+
+                                <p:separator/>
+                                <h:panelGrid id="gridDatosCliente" columns="4" style="width: 98%; text-align: left">
+                                    <p:outputLabel value="Rason social: " style="font-weight: bold; width: 15%"/>
+                                    <p:outputLabel  value="#{comprasController.empresaActual.nombreempresa}" style="width: 33%"/>
+
+                                    <p:outputLabel value="Tipo de pago: " for="tipPago" style="font-weight: bold; width: 15%"/>
+                                    <p:selectOneMenu id="tipPago" value="#{comprasController.compraActual.tipopago}" disabled="${!comprasController.enabled}">
+                                        <f:selectItem itemValue="Efectivo" itemLabel="Efectivo"/>
+                                        <f:selectItem itemValue="Credito" itemLabel="Credito"/>
+                                        <f:selectItem itemValue="Targeta" itemLabel="Targeta"/>
+                                    </p:selectOneMenu>                                   
+                                </h:panelGrid>
+                            </p:layoutUnit>
+
+                            <p:layoutUnit id="datosFactura" position="east" style="padding: 5px; text-align: center;
+                                          font-size: 14px;" size="200">
+                                <h:panelGrid columns="1" style="font-size: 24px; font-weight: bold; margin-top: 30px; margin: 0 auto;">
+                                    COMPRA
+                                    <p:outputLabel value="#{comprasController.numeroCompra}"/>
+                                </h:panelGrid>
+                            </p:layoutUnit>                            
+                        </p:layout>
+                        <p:separator/>
+
+                        <h:panelGrid id="gridBuscarProducto" columns="6">
+
+                            <p:commandButton value="Producto" oncomplete="PF('dialogProductos').show()" 
+                                             update=":formFactura:dlgProductos"
+                                             disabled="#{!comprasController.enabled}"/> 
+
+                        </h:panelGrid>
+
+                        <p:separator/>
+                        <p:dataTable id="tablaProductosFactura" var="prom" value="#{comprasController.listDetCompra}" 
+                                     editable="true" rowIndexVar="rowIndex" >
+
+                            <p:ajax event="rowEdit"  listener="#{comprasController.onRowEdit}" update=":formFactura:tablaProductosFactura, :formFactura:gridTotalFactura" />
+                            <p:ajax event="rowEditCancel" listener="#{comprasController.onRowCancel}" update=":formFactura:tablaProductosFactura, :formFactura:gridTotalFactura" />
+
+                            <p:column headerText="Codigo">
+                                <h:outputText value="${prom.idproducto.idproducto}"/>
+                            </p:column>
+
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{prom.producto}"/>
+                            </p:column>
+
+                            <p:column headerText="Cantidad">
+
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{prom.cantidadcompra}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="modelInput" value="#{prom.cantidadcompra}" type="number"/>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+
+                            <p:column headerText="Precio Venta">
+                                $ <h:outputText value="#{prom.preciocompra}"/>
+                            </p:column>
+
+                            <p:column headerText="Total">
+                                $ <h:outputText  value="#{prom.total}"/> 
+                            </p:column>
+
+                            <p:column headerText="Editar Cantidad">
+                                <p:rowEditor />
+                            </p:column>
+
+                            <p:column headerText="Quitar Producto">
+                                <p:commandLink value="X" actionListener="#{comprasController.quitarProductoDetalleFactura(prom.producto, rowIndex)}" 
+                                               title="Quitar Producto" style="text-decoration: none; color: greenyellow;"
+                                               update=":formFactura:tablaProductosFactura :formFactura:gridTotalFactura"/>                                               
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:separator/>
+                        <h:panelGrid id="gridTotalFactura" columns="2" style=" font-size: 16px; text-align: right; width: 99%"> 
+                            <p:outputLabel value="SUBTOTAL: $" />
+                            <p:outputLabel id="lblsubTot" value="#{comprasController.totalCompraIMP}" /> 
+                            <p:outputLabel value="TOTAL IVA: $"/>
+                            <p:outputLabel id="lblIVA" value="#{comprasController.IVAIMP}"/>   
+                            <p:outputLabel value="DESCUENTO:- $"/>
+                            <p:outputLabel id="lblDesc" value="#{comprasController.desceuntoIMP}"/>   
+                            <p:outputLabel value="TOTAL: $"/>
+                            <p:outputLabel id="lblTotal" value="#{comprasController.totalGenIMP}"/> 
+
+
+                        </h:panelGrid>
+
+
+
+                    </p:panel>
+
+                    <!--Dialog para mostrar datos del proveedor-->
+                    <p:dialog id="dlgClientes" widgetVar="dialogProveedor"  modal="true" resizable="false" appendTo="@(body)"
+                              showEffect="explode" hideEffect="explode">
+                        <p:dataTable id="tablaClientes" paginator="true" paginatorPosition="top" style="width: 700px;"
+                                     var="ct" value="#{proveedorController.listProveedor}" emptyMessage="No hay datos de clientes">
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{ct.cedula}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre del cliente">
+                                <h:outputText value="#{ct.razonzocial}"/>
+                            </p:column>
+
+                            <p:column headerText="Direccion">
+                                <h:outputText value="#{ct.direccion}"/>
+                            </p:column>
+
+                            <p:column headerText="">
+                                <p:commandButton value="Seleccionar" actionListener="#{comprasController.agregarDatosProveed(ct)}"
+                                                 oncomplete="PF('dialogProveedor').hide();"
+                                                 update=":formFactura:gridBuscarDatosCliente,:formFactura:mensajeGeneral"/>                                                                    
+                            </p:column>                                                   
+                        </p:dataTable> 
+                        <p:commandButton value="Cerrar" onclick="PF('dialogProveedor').hide();"/>
+                    </p:dialog>
+
+
+
+                    <!--Ingresar Productos al sistema-->
+                    <p:dialog id="dlgProductos" widgetVar="dialogProductos"  modal="true" resizable="false" appendTo="@(body)"
+                              showEffect="explode" hideEffect="explode">
+                        <p:dataTable id="tablaProductos" paginator="true" paginatorPosition="top" style="width: 700px;"
+                                     var="pro" value="#{productoController.listarProducto}" emptyMessage="No hay datos de productos">
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{pro.idproducto}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre del Producto:">
+                                <h:outputText value="#{pro.producto}"/>
+                            </p:column>
+
+                            <p:column headerText="PrecioVenta">
+                                <h:outputText value="#{pro.precioventa}"/>
+                            </p:column>
+
+                            <p:column headerText="Stock Actual">
+                                <h:outputText value="#{pro.stock}"/>
+                            </p:column>
+
+                            <p:column headerText="">
+                                <p:commandButton value="Seleccionar" ajax="true" 
+                                                 actionListener="#{comprasController.pedirCantidadProd(pro)}" 
+                                                 oncomplete="PF('dialogCantidadProducto').show(); "
+                                                 update=":dlgCantidadProducto,:IngCantidad55"/>                                                                    
+                            </p:column>                                                   
+                        </p:dataTable> 
+                        <p:commandButton value="Cerrar" onclick="PF('dialogProductos').hide();"/>
+                        <p:commandButton id="btnCreate" icon="ui-icon-plus"   value="Nuevo producto" title="Crear" 
+                                         actionListener="#{productoController.prepareCreate}" 
+                                         oncomplete="PF('widCreateProduct').show()"
+                                         update="formCreateProduct,dlgCreateCateg"/>
+                    </p:dialog> 
+
+                    <!--Pie del comprobante-->
+                    <p:separator/>
+                    <p:commandButton value="CANCELAR" action="#{comprasController.limpiarObj()}" style="margin: 1%;"
+                                     disabled="#{!comprasController.enabled}"
+                                     update=":formFactura, :formFactura:gridTotalFactura, :formFactura:capaDatosClienteFactura, :formFactura:tablaProductosFactura,:btnAct"/>
+                    <p:commandButton id="btnImprimir1" value="IMPRIMIR" type="button" icon="pi pi-print" style="margin: 1%;" disabled="#{!comprasController.enabled}">
+                        <p:printer target="Comprovante" />
+                    </p:commandButton>
+                    <p:commandButton value="REGISTRAR" actionListener="#{comprasController.guardarCompra()}" style="margin: 1%;"
+                                     action="#{comprasController.limpiarObj()}"
+                                     disabled="#{!comprasController.enabled}"
+                                     update=":formFactura, :formFactura:gridTotalFactura, :formFactura:capaDatosClienteFactura, :formFactura:tablaProductosFactura,:btnAct" />  
+                    <br/>
+
+                    <p:outputLabel value="#{loginController.usuarioLogeado.apellidos}"/>
+
+
+
+
+                </h:form>   
+
+
+
+                <!--Dialog para pedir la cantidad de producto a Comprar-->
+                <p:dialog id="dlgCantidadProducto" widgetVar="dialogCantidadProducto" header="Cantidad" appendTo="@(body)"
+                          modal="true">      
+                    <h:form id="IngCantidad55">
+
+                        <p:outputLabel value="Cantidad...#{comprasController.prodSelec.moneda}: " for="cantd" />
+                        <p:inputText id="cantd" value="#{comprasController.cantProducto}" title="Cantidad" placeholder="Solo enteros" type="number"/>
+
+                        <p:commandButton icon="ui-icon-disk" actionListener="#{comprasController.agregarDatosProducto()}" ajax="true"
+                                         value="Guardar" update=":formFactura:tablaProductosFactura,:formFactura:mensajeGeneral, :formFactura:gridTotalFactura"
+                                         oncomplete="PF('dialogCantidadProducto').hide(); PF('dialogProductos').hide();"/>
+                    </h:form>
+                </p:dialog> 
+
+
+
+
+                <p:dialog id="dlgCreateCateg" widgetVar="widCreateProduct" modal="true" resizable="false" 
+                          appendTo="@(body)" header="CREAR PRODUCTO" showEffect="explode" hideEffect="explode">
+
+                    <h:form id="formCreateProduct">
+                        <h:panelGroup id="display">
+                            <p:panelGrid id="pnlProduct" columns="2" rendered="#{productoController.selected != null}">
+
+                                <p:outputLabel value="Nombre: " for="producto" />
+                                <p:inputText id="producto" value="#{productoController.selected.producto}"  />
+
+                                <p:outputLabel value="Presentacion: " for="presentacion" />
+                                <p:selectOneMenu id="presentacion"
+                                                 value="#{productoController.selected.presentacion}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Saco" itemLabel="Saco"/>
+                                    <f:selectItem itemValue="Caja" itemLabel="Caja"/>
+                                    <f:selectItem itemValue="Carton" itemLabel="Carton"/>
+                                    <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
+                                    <f:selectItem itemValue="Pacas" itemLabel="Pacas"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Unidad: " for="unidad" />
+                                <p:selectOneMenu id="unidad"
+                                                 value="#{productoController.selected.unidad}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Kilo" itemLabel="Kilo"/>
+                                    <f:selectItem itemValue="Gramo" itemLabel="Caja"/>
+                                    <f:selectItem itemValue="Litro" itemLabel="Litro"/>
+                                    <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
+                                    <f:selectItem itemValue="Galon" itemLabel="Galon"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Moneda: " for="moneda" />
+                                <p:selectOneMenu id="moneda"
+                                                 value="#{productoController.selected.moneda}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Dolar" itemLabel="Dolar"/>
+                                    <f:selectItem itemValue="Euro" itemLabel="Euro"/>
+                                    <f:selectItem itemValue="Sol" itemLabel="Sol"/>
+                                    <f:selectItem itemValue="Pesos" itemLabel="Peso"/>
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel value="Cantidad: " for="cantidComp" />
+                                <p:inputText id="cantidComp" value="#{productoController.selected.stock}"/>
+
+                                <p:outputLabel value="Precio compra: " for="preciocompra" />
+                                <p:inputText id="preciocompra" value="#{productoController.selected.preciocompra}"/>
+
+                                <p:outputLabel value="Precio venta: " for="precioventa" />
+                                <p:inputText id="precioventa" value="#{productoController.selected.precioventa}" />
+
+                                <p:outputLabel value="Fecha caducidad: " for="fechavencimiento" />
+                                <p:calendar id="fechavencimiento" pattern="MM/dd/yyyy" value="#{productoController.selected.fechavencimiento}"  showOn="button"/>
+
+                                <p:outputLabel value="Categoria" for="idcategoria" />
+                                <p:selectOneMenu id="idcategoria" value="#{productoController.selected.idcategoria}" required="true" >
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItems value="#{categoriaController.itemsAvailableSelectOne}"
+                                                   var="idcategoriaItem"
+                                                   itemLabel="#{idcategoriaItem.categoria}"
+                                                   itemValue="#{idcategoriaItem}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Usuario: " for="idusuarios" />
+                                <p:selectOneMenu id="idusuarios" value="#{productoController.selected.idusuarios}" required="true" >
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                                   var="idusuariosItem"
+                                                   itemLabel="#{idusuariosItem.apellidos}"
+                                                   itemValue="#{idusuariosItem}"/>
+                                </p:selectOneMenu>
+
+
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"  
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formFactura:mensajeGeneral, :formFactura:dlgProductos"
+                                                 onclick="widCreateProduct.hide()"
+                                                 action="#{productoController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false"
+                                                 actionListener="#{productoController.create}"
+                                                 process="@this,pnlProduct" partialSubmit="true"
+                                                 update=":formFactura:mensajeGeneral,:formFactura:dlgProductos"
+                                                 oncomplete="PF('widCreateProduct').hide();"
+                                                 />
+                            </p:fieldset>
+
+                            <!--El producto se esta creando dos veces ojo verificar-->
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

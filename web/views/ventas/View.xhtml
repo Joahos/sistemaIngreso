@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="VentasViewDlg" widgetVar="VentasViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{mensajes.ViewVentasTitle}">
+            <h:form id="VentasViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{ventasController.selected != null}">
+                        <h:outputText value="#{mensajes.ViewVentasLabel_idventas}"/>
+                        <h:outputText value="#{ventasController.selected.idventas}" title="#{mensajes.ViewVentasTitle_idventas}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_fechaventa}"/>
+                        <h:outputText value="#{ventasController.selected.fechaventa}" title="#{mensajes.ViewVentasTitle_fechaventa}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_numeroventa}"/>
+                        <h:outputText value="#{ventasController.selected.numeroventa}" title="#{mensajes.ViewVentasTitle_numeroventa}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_cliente}"/>
+                        <h:outputText value="#{ventasController.selected.cliente}" title="#{mensajes.ViewVentasTitle_cliente}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_cedulacliente}"/>
+                        <h:outputText value="#{ventasController.selected.cedulacliente}" title="#{mensajes.ViewVentasTitle_cedulacliente}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_vendedor}"/>
+                        <h:outputText value="#{ventasController.selected.vendedor}" title="#{mensajes.ViewVentasTitle_vendedor}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_moneda}"/>
+                        <h:outputText value="#{ventasController.selected.moneda}" title="#{mensajes.ViewVentasTitle_moneda}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_subtotal}"/>
+                        <h:outputText value="#{ventasController.selected.subtotal}" title="#{mensajes.ViewVentasTitle_subtotal}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_totaliva}"/>
+                        <h:outputText value="#{ventasController.selected.totaliva}" title="#{mensajes.ViewVentasTitle_totaliva}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_total}"/>
+                        <h:outputText value="#{ventasController.selected.total}" title="#{mensajes.ViewVentasTitle_total}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_tipopago}"/>
+                        <h:outputText value="#{ventasController.selected.tipopago}" title="#{mensajes.ViewVentasTitle_tipopago}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_estado}"/>
+                        <p:selectBooleanCheckbox value="#{ventasController.selected.estado}" disabled="true"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_idcliente}"/>
+                        <h:outputText value="#{ventasController.selected.idcliente}" title="#{mensajes.ViewVentasTitle_idcliente}"/>
+                        <h:outputText value="#{mensajes.ViewVentasLabel_idusuarios}"/>
+                        <h:outputText value="#{ventasController.selected.idusuarios}" title="#{mensajes.ViewVentasTitle_idusuarios}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{mensajes.Close}" onclick="VentasViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

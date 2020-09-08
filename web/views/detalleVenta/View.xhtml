@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetalleVentaViewDlg" widgetVar="DetalleVentaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{mensajes.ViewDetalleVentaTitle}">
+            <h:form id="DetalleVentaViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{detalleVentaController.selected != null}">
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_iddetalleventa}"/>
+                        <h:outputText value="#{detalleVentaController.selected.iddetalleventa}" title="#{mensajes.ViewDetalleVentaTitle_iddetalleventa}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_numeroventa}"/>
+                        <h:outputText value="#{detalleVentaController.selected.numeroventa}" title="#{mensajes.ViewDetalleVentaTitle_numeroventa}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_cedulacliente}"/>
+                        <h:outputText value="#{detalleVentaController.selected.cedulacliente}" title="#{mensajes.ViewDetalleVentaTitle_cedulacliente}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_producto}"/>
+                        <h:outputText value="#{detalleVentaController.selected.producto}" title="#{mensajes.ViewDetalleVentaTitle_producto}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_moneda}"/>
+                        <h:outputText value="#{detalleVentaController.selected.moneda}" title="#{mensajes.ViewDetalleVentaTitle_moneda}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_precioventa}"/>
+                        <h:outputText value="#{detalleVentaController.selected.precioventa}" title="#{mensajes.ViewDetalleVentaTitle_precioventa}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_cantidadventa}"/>
+                        <h:outputText value="#{detalleVentaController.selected.cantidadventa}" title="#{mensajes.ViewDetalleVentaTitle_cantidadventa}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_descuento}"/>
+                        <h:outputText value="#{detalleVentaController.selected.descuento}" title="#{mensajes.ViewDetalleVentaTitle_descuento}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_importe}"/>
+                        <h:outputText value="#{detalleVentaController.selected.importe}" title="#{mensajes.ViewDetalleVentaTitle_importe}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_fechaventa}"/>
+                        <h:outputText value="#{detalleVentaController.selected.fechaventa}" title="#{mensajes.ViewDetalleVentaTitle_fechaventa}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_estado}"/>
+                        <p:selectBooleanCheckbox value="#{detalleVentaController.selected.estado}" disabled="true"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_idcliente}"/>
+                        <h:outputText value="#{detalleVentaController.selected.idcliente}" title="#{mensajes.ViewDetalleVentaTitle_idcliente}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_idproducto}"/>
+                        <h:outputText value="#{detalleVentaController.selected.idproducto}" title="#{mensajes.ViewDetalleVentaTitle_idproducto}"/>
+                        <h:outputText value="#{mensajes.ViewDetalleVentaLabel_idusuarios}"/>
+                        <h:outputText value="#{detalleVentaController.selected.idusuarios}" title="#{mensajes.ViewDetalleVentaTitle_idusuarios}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{mensajes.Close}" onclick="DetalleVentaViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

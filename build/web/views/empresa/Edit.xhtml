@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmpresaEditDlg" widgetVar="EmpresaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{mensajes.EditEmpresaTitle}">
+            <h:form id="EmpresaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{empresaController.selected != null}">
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_idempresa}" for="idempresa" />
+                        <p:inputText id="idempresa" value="#{empresaController.selected.idempresa}" title="#{mensajes.EditEmpresaTitle_idempresa}" required="true" requiredMessage="#{mensajes.EditEmpresaRequiredMessage_idempresa}"/>
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_cedulaempresa}" for="cedulaempresa" />
+                        <p:inputText id="cedulaempresa" value="#{empresaController.selected.cedulaempresa}" title="#{mensajes.EditEmpresaTitle_cedulaempresa}" />
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_nombreempresa}" for="nombreempresa" />
+                        <p:inputText id="nombreempresa" value="#{empresaController.selected.nombreempresa}" title="#{mensajes.EditEmpresaTitle_nombreempresa}" />
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_direccionempresa}" for="direccionempresa" />
+                        <p:inputText id="direccionempresa" value="#{empresaController.selected.direccionempresa}" title="#{mensajes.EditEmpresaTitle_direccionempresa}" />
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_correoempresa}" for="correoempresa" />
+                        <p:inputText id="correoempresa" value="#{empresaController.selected.correoempresa}" title="#{mensajes.EditEmpresaTitle_correoempresa}" />
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_telefonoempresa}" for="telefonoempresa" />
+                        <p:inputText id="telefonoempresa" value="#{empresaController.selected.telefonoempresa}" title="#{mensajes.EditEmpresaTitle_telefonoempresa}" />
+                        <p:outputLabel value="#{mensajes.EditEmpresaLabel_idusuarios}" for="idusuarios" />
+                        <p:selectOneMenu id="idusuarios" value="#{empresaController.selected.idusuarios}" required="true" requiredMessage="#{mensajes.EditEmpresaRequiredMessage_idusuarios}">
+                            <f:selectItem itemLabel="#{mensajes.SelectOneMessage}"/>
+                            <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                           var="idusuariosItem"
+                                           itemValue="#{idusuariosItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{empresaController.update}" value="#{mensajes.Save}" update="display,:EmpresaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EmpresaEditDialog');"/>
+                    <p:commandButton value="#{mensajes.Cancel}" onclick="EmpresaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

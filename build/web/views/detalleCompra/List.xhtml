@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{mensajes.ListDetalleCompraTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="DetalleCompraListForm">
+                <p:panel header="#{mensajes.ListDetalleCompraTitle}">
+                    <p:dataTable id="datalist" value="#{detalleCompraController.items}" var="item"
+                                 selectionMode="single" selection="#{detalleCompraController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.iddetallecompra}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_iddetallecompra}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.iddetallecompra}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_numerocompra}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.numerocompra}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_cedulaproveedor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cedulaproveedor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_producto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.producto}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_moneda}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.moneda}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_preciocompra}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.preciocompra}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_cantidadcompra}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cantidadcompra}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_descuento}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descuento}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_importe}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.importe}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_fechacompra}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechacompra}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_estado}"/>
+                            </f:facet>
+                            <p:selectBooleanCheckbox value="#{item.estado}" disabled="true"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_idcategoria}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idcategoria}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_idproducto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idproducto}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_idproveedor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idproveedor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{mensajes.ListDetalleCompraTitle_idusuarios}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idusuarios}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{mensajes.Create}" actionListener="#{detalleCompraController.prepareCreate}" update=":DetalleCompraCreateForm" oncomplete="PF('DetalleCompraCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{mensajes.View}" update=":DetalleCompraViewForm" oncomplete="PF('DetalleCompraViewDialog').show()" disabled="#{empty detalleCompraController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{mensajes.Edit}" update=":DetalleCompraEditForm" oncomplete="PF('DetalleCompraEditDialog').show()" disabled="#{empty detalleCompraController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{mensajes.Delete}" actionListener="#{detalleCompraController.destroy}" update=":growl,datalist" disabled="#{empty detalleCompraController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

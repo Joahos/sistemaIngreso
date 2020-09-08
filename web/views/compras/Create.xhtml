@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ComprasCreateDlg" widgetVar="ComprasCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{mensajes.CreateComprasTitle}">
+            <h:form id="ComprasCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{comprasController.compraActual != null}">
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_fechacompra}" for="fechacompra" />
+                        <p:calendar id="fechacompra" pattern="MM/dd/yyyy" value="#{comprasController.compraActual.fechacompra}" title="#{mensajes.EditComprasTitle_fechacompra}"  showOn="button"/>
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_numerocompra}" for="numerocompra" />
+                        <p:inputText id="numerocompra" value="#{comprasController.compraActual.numerocompra}" title="#{mensajes.CreateComprasTitle_numerocompra}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_proveedor}" for="proveedor" />
+                        <p:inputText id="proveedor" value="#{comprasController.compraActual.proveedor}" title="#{mensajes.CreateComprasTitle_proveedor}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_cedulaproveedor}" for="cedulaproveedor" />
+                        <p:inputText id="cedulaproveedor" value="#{comprasController.compraActual.cedulaproveedor}" title="#{mensajes.CreateComprasTitle_cedulaproveedor}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_comprador}" for="comprador" />
+                        <p:inputText id="comprador" value="#{comprasController.compraActual.comprador}" title="#{mensajes.CreateComprasTitle_comprador}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_moneda}" for="moneda" />
+                        <p:inputText id="moneda" value="#{comprasController.compraActual.moneda}" title="#{mensajes.CreateComprasTitle_moneda}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_subtotal}" for="subtotal" />
+                        <p:inputText id="subtotal" value="#{comprasController.compraActual.subtotal}" title="#{mensajes.CreateComprasTitle_subtotal}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_totaliva}" for="totaliva" />
+                        <p:inputText id="totaliva" value="#{comprasController.compraActual.totaliva}" title="#{mensajes.CreateComprasTitle_totaliva}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_total}" for="total" />
+                        <p:inputText id="total" value="#{comprasController.compraActual.total}" title="#{mensajes.CreateComprasTitle_total}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_tipopago}" for="tipopago" />
+                        <p:inputText id="tipopago" value="#{comprasController.compraActual.tipopago}" title="#{mensajes.CreateComprasTitle_tipopago}" />
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_estado}" for="estado" />
+                        <p:selectBooleanCheckbox id="estado" value="#{comprasController.compraActual.estado}" />
+                        
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_idproveedor}" for="idproveedor" />
+                        <p:selectOneMenu id="idproveedor" value="#{comprasController.compraActual.idproveedor}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idproveedor}">
+                            <f:selectItems value="#{proveedorController.itemsAvailableSelectOne}"
+                                           var="idproveedorItem"
+                                           itemValue="#{idproveedorItem}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="#{mensajes.CreateComprasLabel_idempresa}" for="idempresa" />
+                        <p:selectOneMenu id="idempresa" value="#{comprasController.compraActual.idempresa}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idempresa}">
+                            <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"
+                                           var="idempresaItem"
+                                           itemValue="#{idempresaItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{comprasController.create}" value="#{mensajes.Save}" update="display,:ComprasListForm:datalist" oncomplete="handleSubmit(args,'ComprasCreateDialog');"/>
+                    <p:commandButton value="#{mensajes.Cancel}" onclick="ComprasCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

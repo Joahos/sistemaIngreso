@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="formListCateg">
+                    <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="2000"/>
+
+                    <p:panel header="Nomina de categorias" >
+
+                        <p:dataTable  id="nominaCateg" value="#{categoriaController.listarCategorias}" var="item"
+                                      selectionMode="single" selection="#{categoriaController.categoriaActual}"
+                                      paginator="true"
+                                      rowKey="#{item.idcategoria}"
+                                      rows="10"
+                                      rowsPerPageTemplate="10,20,30"
+                                      >
+
+                            <p:ajax event="rowSelect"   update="btnCreate btnView btnEdit btnDelete"/>
+                            <p:ajax event="rowUnselect" update="btnCreate btnView btnEdit btnDelete"/>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Identificacion"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idcategoria}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Categorias"/>
+                                </f:facet>
+                                <h:outputText value="#{item.categoria}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Estado"/>
+                                </f:facet>
+                                <p:selectBooleanCheckbox value="#{item.estado}" disabled="true"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Usuario"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idusuarios.apellidos}"/>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnCreate" icon="ui-icon-plus"   value="Nuevo" title="Crear" 
+                                                 actionListener="#{categoriaController.prepareCreate}" 
+                                                 update=":formCreateCateg" 
+                                                 oncomplete="PF('widCreateCateg').show()"/>
+
+                                <p:commandButton id="btnEdit"   icon="ui-icon-pencil" value="Editar" title="Editar" 
+                                                 disabled="#{empty categoriaController.categoriaActual}" 
+                                                 update=":formEditCateg" 
+                                                 oncomplete="PF('widEditCateg').show()" />
+
+                                <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
+                                                 disabled="#{empty categoriaController.categoriaActual}"
+                                                 update=":formViewCateg" 
+                                                 oncomplete="PF('widViewCateg').show()" />
+
+                                <p:commandButton id="btnDelete" icon="ui-icon-trash"  value="Eliminar" title="Eliminar"
+                                                 disabled="#{empty categoriaController.categoriaActual}"
+                                                 update=":formBorrarCateg" 
+                                                 oncomplete="PF('widEraseCateg').show()" />
+
+                            </f:facet>
+
+                        </p:dataTable>
+                        <!--                            </p:panelGrid>-->
+                    </p:panel>
+                </h:form>
+
+                <p:dialog id="dlgCreateCateg" widgetVar="widCreateCateg" modal="true" resizable="false" 
+                          appendTo="@(body)" header="CREAR CATEGORIA" showEffect="explode" hideEffect="explode">
+
+                    <h:form id="formCreateCateg">
+                        <h:panelGroup id="display">
+                            <p:panelGrid id="pnlPersona" columns="2" rendered="#{categoriaController.categoriaActual != null}">
+                                
+                                
+                                <p:commandButton value="Ver" action="#{categoriaController.enableButton()}" update="categoria"/>
+                                <p:outputLabel value="Categoria" for="categoria" />
+                                <p:inputText id="categoria" value="#{categoriaController.categoriaActual.categoria}" title="Categoria" 
+                                             disabled="#{!categoriaController.enabled}"/>
+
+                                <p:outputLabel value="Usuario" for="idusuarios" />
+                                <p:selectOneMenu id="idusuarios" value="#{categoriaController.categoriaActual.idusuarios}" required="true" 
+                                                 requiredMessage="Usuario requerido">
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                                   var="idusuariosItem"
+                                                   itemValue="#{idusuariosItem}"
+                                                   itemLabel="#{idusuariosItem.apellidos}  #{idusuariosItem.nombres}"/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"  
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListCateg:msmGrowl, :formListCateg:nominaCateg"
+                                                 onclick="widCreateCateg.hide()"
+                                                 action="#{categoriaController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" value="Guardar" 
+                                                 actionListener="#{categoriaController.create()}"
+                                                 process="@this,pnlPersona" partialSubmit="true"
+                                                 update=":formListCateg:msmGrowl,formListCateg:nominaCateg"
+                                                 oncomplete="PF('widCreateCateg').hide();"/>
+                            </p:fieldset>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="UsuariosEditDlg" widgetVar="widEditCateg" modal="true" resizable="false" appendTo="@(body)" header="EDITAR CATEGORIA">
+                    <h:form id="formEditCateg">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{categoriaController.categoriaActual != null}">
+
+                                <p:outputLabel value="Identificacion" for="idcategoria" />
+                                <p:inputText id="idcategoria" value="#{categoriaController.categoriaActual.idcategoria}" title="Categoria"
+                                             readonly="true"/>
+
+
+
+                                <p:outputLabel value="Categoria" for="categoria" />
+                                <p:inputText id="categoria" value="#{categoriaController.categoriaActual.categoria}" title="Categoria" />
+
+                                <p:outputLabel value="Usuario" for="idusuarios" />
+                                <p:selectOneMenu id="idusuarios" value="#{categoriaController.categoriaActual.idusuarios}" required="true" requiredMessage="Usuario requerido">
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                                   var="idusuariosItem"
+                                                   itemValue="#{idusuariosItem}"
+                                                   itemLabel="#{idusuariosItem.apellidos} #{idusuariosItem.nombres}"/>
+                                </p:selectOneMenu>
+
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListCateg:msmGrowl, :formListCateg:nominaCateg"
+                                                 onclick="widEditCateg.hide()"
+                                                 action="#{categoriaController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" actionListener="#{categoriaController.update()}" 
+                                                 value="Guardar" update=":formListCateg:msmGrowl, :formListCateg:nominaCateg" 
+                                                 oncomplete="PF('widEditCateg').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="CategViewDlg" widgetVar="widViewCateg" modal="true" resizable="false" appendTo="@(body)" header="CATEGORIAS">
+                    <h:form id="formViewCateg">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{categoriaController.categoriaActual != null}">
+
+                                <h:outputText value="Identificacion"/>
+                                <h:outputText value="#{categoriaController.categoriaActual.idcategoria}" />
+
+                                <h:outputText value="Categorias"/>
+                                <h:outputText value="#{categoriaController.categoriaActual.categoria}" />
+
+                                <h:outputText value="Estado"/>
+                                <p:selectBooleanCheckbox value="#{categoriaController.categoriaActual.estado}" disabled="true"/>
+
+                                <h:outputText value="Usuario"/>
+                                <h:outputText value="C.I: #{categoriaController.categoriaActual.idusuarios.cedula}, Nombres: #{categoriaController.categoriaActual.idusuarios.apellidos}"/>
+
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cerrar" 
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListCateg:msmGrowl, :formListCateg:nominaCateg"
+                                                 onclick="widViewCateg.hide()"
+                                                 action="#{categoriaController.limpiarObjeto()}"/>
+                            </p:fieldset>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="CategEraseDlg" widgetVar="widEraseCateg" modal="true" resizable="false" 
+                          appendTo="@(body)" header="ELIMINAR CATEGORIA"
+                          showEffect="explode" hideEffect="explode">
+                    <h:form id="formBorrarCateg">
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="1" rendered="#{categoriaController.categoriaActual != null}">
+                                Esta seguro de eliminar el categoria: 
+
+                                #{categoriaController.categoriaActual.categoria}
+                            </p:panelGrid>
+                            <p:fieldset style="text-align: center; padding: 0px">
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" 
+                                                 process="@this" partialSubmit="true" 
+                                                 update=":formListCateg:msmGrowl, :formListCateg:nominaCateg"
+                                                 onclick="widEraseCateg.hide()"
+                                                 action="#{categoriaController.limpiarObjeto()}"/>
+
+                                <p:commandButton  icon="ui-icon-trash"
+                                                  process="@this"
+                                                  actionListener="#{categoriaController.eraseLog()}" 
+                                                  value="Eliminar" update=":formListCateg:msmGrowl, :formListCateg:nominaCateg"
+                                                  oncomplete="PF('widEraseCateg').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
