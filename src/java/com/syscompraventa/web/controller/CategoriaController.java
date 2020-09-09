@@ -107,7 +107,6 @@ public class CategoriaController implements Serializable {
     }
 
     private Boolean enabled = false;
-    
 
     public boolean isEnabled() {
         return enabled;
@@ -122,11 +121,12 @@ public class CategoriaController implements Serializable {
     }
 
     public void eraseLog() {
-        prodAfectado = productoFacade.produdctoAfectado(categoriaActual);
 
-        categoriaActual.setEstado(false);
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("CategoriaErased"));
         try {
+            prodAfectado = productoFacade.produdctoAfectado(categoriaActual);
+
+            categoriaActual.setEstado(false);
+            persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("CategoriaErased"));
             for (Producto prod : prodAfectado) {
                 productoFacade.desactivarProdXXGateg(prod.getIdproducto());
             }
@@ -215,7 +215,6 @@ public class CategoriaController implements Serializable {
     public void setProdAfectado(List<Producto> prodAfectado) {
         this.prodAfectado = prodAfectado;
     }
-
 
     @FacesConverter(forClass = Categoria.class)
     public static class CategoriaControllerConverter implements Converter {

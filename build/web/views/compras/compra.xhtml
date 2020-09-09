@@ -17,10 +17,10 @@
                     REALIZAR COMPRA
                     <p:separator/>
                     <h:panelGrid columns="3" style="margin: 0px">
-                        <p:commandButton value="Nueva compra" actionListener="#{comprasController.numeracionFactura()}"
+                        <p:commandButton value="Nueva compra" actionListener="#{comprasController.numeracionComprobante()}"
                                          update=":formFactura,:btnAct,:formFactura:btnImprimir1" action="#{comprasController.enableButton()}"
                                          />
-                        <p:commandButton value="Consultar compras" actionListener="#{comprasController.numeracionFactura()}"
+                        <p:commandButton value="Consultar compras" actionListener="#{comprasController.numeracionComprobante()}"
                                          update=":formFactura"
                                          />
 

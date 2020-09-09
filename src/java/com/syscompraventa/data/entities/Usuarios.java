@@ -72,8 +72,8 @@ public class Usuarios implements Serializable {
 //    private List<Compras> comprasList;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
     private List<Categoria> categoriaList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
-    private List<Ventas> ventasList;
+//    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
+//    private List<Ventas> ventasList;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
     private List<Proveedor> proveedorList;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")

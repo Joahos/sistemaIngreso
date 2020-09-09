@@ -35,7 +35,7 @@ public class ProductoFacade extends AbstractFacade<Producto> {
         return q.getResultList();
     }
 
-    public List<Producto> produdctoAfectado(Categoria cate) {
+    public List<Producto> produdctoAfectado(Categoria cate) throws Exception{
         String jpql = "SELECT p FROM Producto p WHERE p.idcategoria =:cat1";
         Query q = em.createQuery(jpql);
         q.setParameter("cat1", cate);

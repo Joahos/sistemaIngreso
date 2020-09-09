@@ -15,7 +15,7 @@
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_iddetalleventa}" for="iddetalleventa" />
                         <p:inputText id="iddetalleventa" value="#{detalleVentaController.selected.iddetalleventa}" title="#{mensajes.CreateDetalleVentaTitle_iddetalleventa}" required="true" requiredMessage="#{mensajes.CreateDetalleVentaRequiredMessage_iddetalleventa}"/>
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_numeroventa}" for="numeroventa" />
-                        <p:inputText id="numeroventa" value="#{detalleVentaController.selected.numeroventa}" title="#{mensajes.CreateDetalleVentaTitle_numeroventa}" />
+                        <p:inputText id="numeroventa" value="#{detalleVentaController.selected.unidad}" title="#{mensajes.CreateDetalleVentaTitle_numeroventa}" />
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_cedulacliente}" for="cedulacliente" />
                         <p:inputText id="cedulacliente" value="#{detalleVentaController.selected.cedulacliente}" title="#{mensajes.CreateDetalleVentaTitle_cedulacliente}" />
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_producto}" for="producto" />
@@ -30,8 +30,10 @@
                         <p:inputText id="descuento" value="#{detalleVentaController.selected.descuento}" title="#{mensajes.CreateDetalleVentaTitle_descuento}" />
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_importe}" for="importe" />
                         <p:inputText id="importe" value="#{detalleVentaController.selected.importe}" title="#{mensajes.CreateDetalleVentaTitle_importe}" />
+                        
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_fechaventa}" for="fechaventa" />
                         <p:calendar id="fechaventa" pattern="MM/dd/yyyy" value="#{detalleVentaController.selected.fechaventa}" title="#{mensajes.EditDetalleVentaTitle_fechaventa}"  showOn="button"/>
+                        
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_estado}" for="estado" />
                         <p:selectBooleanCheckbox id="estado" value="#{detalleVentaController.selected.estado}" />
                         <p:outputLabel value="#{mensajes.CreateDetalleVentaLabel_idcliente}" for="idcliente" />

@@ -75,9 +75,6 @@ public class Ventas implements Serializable {
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
-    @JoinColumn(name = "idusuarios", referencedColumnName = "idusuarios")
-    @ManyToOne(optional = false)
-    private Usuarios idusuarios;
 
     public Ventas() {
     }
@@ -204,14 +201,6 @@ public class Ventas implements Serializable {
 
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
-    }
-
-    public Usuarios getIdusuarios() {
-        return idusuarios;
-    }
-
-    public void setIdusuarios(Usuarios idusuarios) {
-        this.idusuarios = idusuarios;
     }
 
     @Override

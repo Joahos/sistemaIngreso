@@ -2,6 +2,7 @@ package com.syscompraventa.data.entities;
 
 import java.util.Date;
 import javax.annotation.Generated;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -15,6 +16,7 @@ public abstract class Cliente_ {
 	public static volatile SingularAttribute<Cliente, Usuarios> idusuarios;
 	public static volatile SingularAttribute<Cliente, String> cedulacliente;
 	public static volatile SingularAttribute<Cliente, Date> fechaingreso;
+	public static volatile ListAttribute<Cliente, Ventas> ventasList;
 	public static volatile SingularAttribute<Cliente, Integer> idcliente;
 	public static volatile SingularAttribute<Cliente, String> nombrecliente;
 	public static volatile SingularAttribute<Cliente, String> apellidocliente;

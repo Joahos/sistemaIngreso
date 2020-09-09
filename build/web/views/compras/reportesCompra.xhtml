@@ -1,0 +1,373 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="btnAct">
+                    REALIZAR CONSULTAS
+                    <p:separator/>
+                    <h:panelGrid columns="3" style="margin: 0px">
+
+                        <p:commandButton value="Consulta por fecha" oncomplete="PF('wConsultaFech').show()"
+                                         update=":formConsultaFecha" actionListener="#{comprasController.limpiarObj()}"
+                                         />
+
+                        <p:commandButton value="consulta por mes" oncomplete="PF('wConsultaMes').show()"
+                                         update=":formConsultaMes" actionListener="#{comprasController.limpiarObj()}"/>
+
+                    </h:panelGrid>
+                </h:form>
+
+                <h:form id="ComprasListForm">
+                    <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="2000"/>
+
+                    <p:panel header="LISTA DE COMPRAS EFECTUADAS">
+                        <p:dataTable id="datalist" value="#{comprasController.items}" var="item"
+                                     selectionMode="single" selection="#{comprasController.compraActual}"
+                                     paginator="true" rowKey="#{item.idcompras}" rows="10"
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No existe registros" >
+
+                            <p:ajax event="rowSelect"   update=" btnView"/>
+                            <p:ajax event="rowUnselect" update=" btnView"/>
+
+                            <p:column style="width: 15%;">
+                                <f:facet name="header">
+                                    <h:outputText value="FECHA"/>
+                                </f:facet>
+                                <h:outputText value="#{item.fechacompra}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="PROVEEDOR"/>
+                                </f:facet>
+                                <h:outputText value="#{item.proveedor}"/>
+                            </p:column>
+                            <p:column style="width: 15%; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="TIPO PAGO"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tipopago}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="SUBTOTAL"/>
+                                </f:facet>
+                                <h:outputText value="#{item.subtotal}"/>
+                            </p:column>
+                            <p:column style="width: 10%; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="IVA"/>
+                                </f:facet>
+                                <h:outputText value="#{item.totaliva}"/>
+                            </p:column>
+                            <p:column style="width: 10%; text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="TOTAL"/>
+                                </f:facet>
+                                <h:outputText value="#{item.total}"/>
+                            </p:column>
+                            
+
+                            <f:facet name="footer">
+
+                                <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
+                                                 disabled="#{empty productoController.selected}"
+                                                 update=":ComprasViewForm"  actionListener="#{comprasController.obtenerProductos()}"
+                                                 oncomplete="PF('ComprasViewDialog').show()" />
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+
+                <p:dialog id="ComprasViewDlg" widgetVar="ComprasViewDialog" modal="true" resizable="false" appendTo="@(body)" header="DETALLE DE COMPRA" 
+                          >
+                    <h:form id="ComprasViewForm" >
+
+                        <h:panelGroup id="display"  >
+
+                            <p:panel header="INFORMACION" style="width: 1000px;">
+                                <p:panelGrid columns="6" rendered="#{comprasController.compraActual != null}">
+                                    <h:outputText value="Comprobante: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.idcompras}" />
+
+                                    <h:outputText value="Fecha: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.fechacompra}" >
+                                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                                    </h:outputText>
+
+                                    <h:outputText value="Codigo: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.numerocompra}" />
+
+                                    <h:outputText value="Proveedor: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.proveedor}" />
+
+                                    <h:outputText value="CedulaProveedor: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.cedulaproveedor}"/>
+
+                                    <h:outputText value="Comprador: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.comprador}" />
+
+                                    <h:outputText value="Moneda: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.moneda}"/>
+
+                                    <h:outputText value="Subtotal: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.subtotal}" />
+
+                                    <h:outputText value="IVA: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.totaliva}" />
+
+                                    <h:outputText value="Total: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.total}"/>
+
+                                    <h:outputText value="Tipo de pago: " style="font-weight: bold;"/>
+                                    <h:outputText value="#{comprasController.compraActual.tipopago}" />
+
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:panel header="PRODUCTOS" style="text-align: center;width: 1000px;">
+                                <p:dataTable id="datalist" value="#{comprasController.listDetCompra}" var="item"
+                                             rows="10"  rowsPerPageTemplate="10,20,30" emptyMessage="No existe registros">
+
+                                    <p:column >
+                                        <f:facet name="header">
+                                            <h:outputText value="Producto"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idproducto.producto}"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Cantidad"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.cantidadcompra}"/>
+                                    </p:column>
+
+                                    <p:column >
+                                        <f:facet name="header">
+                                            <h:outputText value="Precio"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idproducto.precioventa}"/>
+                                    </p:column>
+                                    <p:column >
+                                        <f:facet name="header">
+                                            <h:outputText value="Presentacion"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.idproducto.presentacion}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+
+                        </h:panelGroup>
+
+                    </h:form>
+                    <h:form>
+                        <p:commandButton value="#{mensajes.Close}" onclick="ComprasViewDialog.hide()" action="#{comprasController.limpiarObj()}"/>
+                        <p:commandButton id="btnImprimir1" value="IMPRIMIR" type="button" icon="pi pi-print" style="margin: 1%;" >
+                            <p:printer target="ComprasViewForm" />
+                        </p:commandButton>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="consultaFecha" widgetVar="wConsultaFech" modal="true" resizable="false" appendTo="@(body)" header="CONSULTAR PORFECHA" 
+                          >
+                    <h:form id="formConsultaFecha" >
+
+                        <h:panelGroup id="display">
+
+                            <p:panel header="FECHA"  style="width: 1000px; text-align: center" >
+
+                                <p:outputLabel value="Desde: " for="fechaDesde" />
+                                <p:calendar id="fechaDesde" pattern="MM/dd/yyyy" value="#{comprasController.fechaUno}" showOn="button"/>
+
+
+                                <p:outputLabel value="Hasta: " for="fechaHasta" style="margin-left: 2%;" />
+                                <p:calendar id="fechaHasta" pattern="MM/dd/yyyy" value="#{comprasController.fechaDos}" showOn="button"/>
+
+                                <p:commandButton value="Consultar" actionListener="#{comprasController.obtenerProductosXFecha()}" style="margin-left: 2%;"
+                                                 update=":formConsultaFecha:tablaCompraFecha, :formConsultaFecha:habImpresion" action="#{comprasController.enableButton()}"/>
+
+                            </p:panel>
+                            <p:panel header="COMPRAS" style="text-align: center;width: 1000px;" id="tablaCompraFecha" >
+                                <h:outputLabel value="REPORTES ENTRE"/><BR/>
+                                <p:outputLabel value="#{comprasController.fechaUno} - #{comprasController.fechaDos}"/>
+                                <p:separator/>
+                                <p:dataTable id="datalist" value="#{comprasController.listCompras}" var="item"
+                                             rows="10"  rowsPerPageTemplate="10,20,30" emptyMessage="No existe registros">
+
+                                    <p:column  style="width: 16%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Fecha"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.fechacompra}">
+                                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column >
+                                        <f:facet name="header">
+                                            <h:outputText value="Proveedor"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.proveedor}" />
+                                    </p:column>
+
+                                    <p:column style="width: 15%">
+                                        <f:facet name="header">
+                                            <h:outputText value="tipo de pago"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.tipopago}"/>
+                                    </p:column>
+                                    <p:column style="width: 12%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Subtotal"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.subtotal}"/>
+                                    </p:column>
+                                    <p:column style="width: 12%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Descuento"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.descuento}"/>
+                                    </p:column>
+
+                                    <p:column style="width: 10%">
+                                        <f:facet name="header">
+                                            <h:outputText value="IVA"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.totaliva}"/>
+                                    </p:column>
+                                    <p:column  style="width: 10%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Total"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.total}"/>
+                                    </p:column>
+
+
+                                </p:dataTable>
+                            </p:panel>
+                            <p:panel id="habImpresion">
+                                <p:commandButton value="#{mensajes.Close}" onclick="ComprasViewDialog.hide()"/>
+                                <p:commandButton id="btnImprimir1" value="IMPRIMIR" type="button" icon="pi pi-print" style="margin: 1%;" disabled="#{!comprasController.enabled}">
+                                    <p:printer target="tablaCompraFecha" />
+                                </p:commandButton>
+                            </p:panel>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="consultaMes" widgetVar="wConsultaMes" modal="true" resizable="false" appendTo="@(body)" header="CONSULTAR PORFECHA" 
+                          >
+                    <h:form id="formConsultaMes" >
+
+                        <h:panelGroup id="display">
+
+                            <p:panel header="MES A CONSULTAR"  style="width: 1000px; text-align: center" >
+
+                                <p:outputLabel value="Mes de: " for="fechaDesde" />
+                                <p:selectOneMenu id="fechaDesde" value="#{comprasController.mes}" >
+                                    <f:selectItem itemValue="Enero" itemLabel="Enero"/>
+                                    <f:selectItem itemValue="Febrero" itemLabel="Febrero"/>
+                                    <f:selectItem itemValue="Marzo" itemLabel="Marzo"/>
+                                    <f:selectItem itemValue="Abril" itemLabel="Abril"/>
+                                    <f:selectItem itemValue="Mayo" itemLabel="Mayo"/>
+                                    <f:selectItem itemValue="Junio" itemLabel="Junio"/>
+                                    <f:selectItem itemValue="Julio" itemLabel="Julio"/>
+                                    <f:selectItem itemValue="Agosto" itemLabel="Agosto"/>
+                                    <f:selectItem itemValue="Septiembre" itemLabel="Septiembre"/>
+                                    <f:selectItem itemValue="Octubre" itemLabel="Octubre"/>
+                                    <f:selectItem itemValue="Noviembre" itemLabel="Nomviembre"/>
+                                    <f:selectItem itemValue="Diciembre" itemLabel="Diciembre"/>
+
+                                </p:selectOneMenu> 
+
+                                <p:commandButton value="Consultar" actionListener="#{comprasController.obtenerProductosXMes()}" style="margin-left: 2%;"
+                                                 action="#{comprasController.enableButton()}"
+                                                 update=":formConsultaMes:habilImpresion,:formConsultaMes:tablaCompraMes" />
+
+                            </p:panel>
+                            <p:panel header="COMPRAS" style="text-align: center;width: 1000px;" id="tablaCompraMes" >
+                                <h:outputLabel value="REPORTES DEL MES DE: #{comprasController.mes}"/>
+                                <p:separator/>
+                                <p:dataTable id="datalist" value="#{comprasController.listCompras}" var="item" emptyMessage="No existe registros"
+                                             rows="10"  rowsPerPageTemplate="10,20,30" >
+
+                                    <p:column  style="width: 16%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Fecha"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.fechacompra}">
+                                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column >
+                                        <f:facet name="header">
+                                            <h:outputText value="Proveedor"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.proveedor}" />
+                                    </p:column>
+
+                                    <p:column style="width: 15%">
+                                        <f:facet name="header">
+                                            <h:outputText value="tipo de pago"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.tipopago}"/>
+                                    </p:column>
+                                    <p:column style="width: 12%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Subtotal"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.subtotal}"/>
+                                    </p:column>
+                                    <p:column style="width: 12%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Descuento"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.descuento}"/>
+                                    </p:column>
+
+                                    <p:column style="width: 10%">
+                                        <f:facet name="header">
+                                            <h:outputText value="IVA"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.totaliva}"/>
+                                    </p:column>
+                                    <p:column  style="width: 10%">
+                                        <f:facet name="header">
+                                            <h:outputText value="Total"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.total}"/>
+                                    </p:column>
+
+
+                                </p:dataTable>
+                            </p:panel>
+                            <p:panel id="habilImpresion"> 
+                                <p:commandButton value="#{mensajes.Close}" onclick="ComprasViewDialog.hide()"/>
+                                <p:commandButton id="btnImprimir1" value="IMPRIMIR" type="button" icon="pi pi-print" style="margin: 1%;" disabled="#{!comprasController.enabled}">
+                                    <p:printer target="tablaCompraMes" />
+                                </p:commandButton>
+                            </p:panel>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

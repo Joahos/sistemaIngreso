@@ -11,10 +11,9 @@ import com.syscompraventa.data.entities.DetalleCompra;
 import com.syscompraventa.data.entities.Empresa;
 import com.syscompraventa.data.entities.Producto;
 import com.syscompraventa.data.entities.Proveedor;
-
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -42,10 +41,6 @@ public class ComprasController implements Serializable {
     private com.syscompraventa.business.facade.ComprasFacade comprasFacade;
     @EJB
     private EmpresaFacade empresaFacade;
-//    @EJB
-//    private UsuariosFacade usuariosFacade;
-    // @EJB
-    //  private ProveedorFacade proveedorFacade;
     @EJB
     private ProductoFacade productoFacad;
     @EJB
@@ -55,21 +50,21 @@ public class ComprasController implements Serializable {
     DecimalFormat des = new DecimalFormat("#0.00");
 
     private List<Compras> items = null;
+    private List<Compras> listCompras;
+    private List<DetalleCompra> listDetCompra;
     private Compras compraActual, compraNumero;
     private boolean enabled;
     private Proveedor proveedorActual;
     private Producto productoActual, prodSelec;
     private Empresa empresaActual;
 //    private Usuarios userLogeado;
-
+    Date fechaUno, fechaDos;
     private long numeroCompra;
     private Float totalCompra;
-    private String fechaSistema, totalCompraIMP, IVAIMP, desceuntoIMP, totalGenIMP;
+    private String fechaSistema, totalCompraIMP, IVAIMP, desceuntoIMP, totalGenIMP, mes;
     private Integer cantProducto;
 
-    private List<DetalleCompra> listDetCompra;
     //   private List<Empresa> emplis;
-
     public ComprasController() {
         this.listDetCompra = new ArrayList<>();
     }
@@ -89,7 +84,8 @@ public class ComprasController implements Serializable {
             cantProducto = null;
             compraActual = new Compras();
             proveedorActual = new Proveedor();
-
+            listDetCompra = new ArrayList<>();
+            listCompras = new ArrayList<>();
             productoActual = new Producto();
             prodSelec = new Producto();
         } catch (Exception e) {
@@ -102,13 +98,14 @@ public class ComprasController implements Serializable {
         fechaSistema = "";
         empresaActual = null;
         numeroCompra = 0;
-        listDetCompra = null;
+        listDetCompra = new ArrayList<>();
+        listCompras = new ArrayList<>();
         proveedorActual = null;
         fechaSistema = totalCompraIMP = IVAIMP = desceuntoIMP = totalGenIMP = null;
         disableButton();
     }
 
-    public void numeracionFactura() {
+    public void numeracionComprobante() {
 
         try {
             empresaActual = empresaFacade.sacarEmpresa();
@@ -176,14 +173,6 @@ public class ComprasController implements Serializable {
 
         } catch (Exception e) {
             System.out.println(e);
-
-//            System.out.println("Mensaje 1 "+e.getMessage());
-//            System.out.println("Mensaje 1 "+e.getClass().getName());
-//            
-//             System.out.println("Mensaje 1 "+e.getCause().getMessage());
-//             System.out.println("Mensaje 1 "+e.getCause().getClass().getName());
-//             
-//              System.out.println("Mensaje 1 "+e.getCause().getCause().getClass().getName());
         }
     }
 
@@ -254,58 +243,12 @@ public class ComprasController implements Serializable {
             }
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Se retiro el producto de la factura"));
 
-            this.calcularTotalFactura2();
+            this.calcularTotalFactura();
 
         } catch (Exception e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", e.getMessage()));
             //  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", e.getMessage()));
-        }
-    }
-
-    public void calcularTotalFactura2() {
-
-        //   Float IVA, descuento = null, totalGeneral, totalCompraXProducto = new Float(0);
-        try {
-
-            for (DetalleCompra item : listDetCompra) {
-
-                System.out.println(" viene ..............." + totalCompraXProducto);
-                System.out.println("Imprimiendo total de compras desde los subidos ..................." + totalCompra);
-                System.out.println("....................." + item.getTotal());
-                totalCompraXProducto = Float.valueOf(item.getPreciocompra()) * item.getCantidadcompra();// getPrecioVenta().multiply(new BigDecimal(item.getCantidad()));
-                item.setTotal(String.valueOf(des.format(totalCompraXProducto)));
-                System.out.println(" viene .......totCampra........" + totalCompraXProducto);
-                System.out.println(" viene ..............." + totalCompra);
-
-            }
-            totalCompra = totalCompra + totalCompraXProducto;
-
-            totalCompraIMP = des.format(totalCompra);
-            ////
-
-            compraActual.setTotal(des.format(totalCompra));
-            IVA = (float) (totalCompra * 0.12);
-            IVAIMP = des.format(IVA);
-
-            if (totalCompra >= 0 && totalCompra < 60) {
-                descuento = (totalCompra + IVA) * (float) 0.04;
-
-            } else if (totalCompra >= 60 && totalCompra < 150) {
-                descuento = (totalCompra + IVA) * (float) 0.06;
-
-            } else if (totalCompra >= 150) {
-                descuento = (totalCompra + IVA) * (float) 0.08;
-            }
-
-            desceuntoIMP = des.format(descuento);
-            totalGeneral = (totalCompra + IVA) - descuento;
-            System.out.println("imprimeindo el total de descuento ................" + totalGeneral);
-            totalGenIMP = des.format(totalGeneral);
-
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", e.getMessage()));
         }
     }
 
@@ -351,6 +294,58 @@ public class ComprasController implements Serializable {
 
     public void disableButton() {
         enabled = false;
+    }
+
+    //{
+    public void obtenerProductos() {
+        try {
+            listDetCompra = detalleCompraFacad.listarCompraXID(compraActual.getIdcompras());
+        } catch (Exception ex) {
+            Logger.getLogger(ComprasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void obtenerProductosXFecha() {
+        listCompras = comprasFacade.listarProductosXFecha(fechaUno, fechaDos);
+
+    }
+
+    public void obtenerProductosXMes() {
+        listCompras = comprasFacade.listarProductosXMes(mes);
+
+    }
+    //}
+
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
+    }
+
+    public List<Compras> getListCompras() {
+        return listCompras;
+    }
+
+    public void setListCompras(List<Compras> listCompras) {
+        this.listCompras = listCompras;
+    }
+
+    public Date getFechaUno() {
+        return fechaUno;
+    }
+
+    public void setFechaUno(Date fechaUno) {
+        this.fechaUno = fechaUno;
+    }
+
+    public Date getFechaDos() {
+        return fechaDos;
+    }
+
+    public void setFechaDos(Date fechaDos) {
+        this.fechaDos = fechaDos;
     }
 
     public Proveedor getProveedorActual() {

@@ -11,7 +11,6 @@ public abstract class Ventas_ {
 
 	public static volatile SingularAttribute<Ventas, String> vendedor;
 	public static volatile SingularAttribute<Ventas, Boolean> estado;
-	public static volatile SingularAttribute<Ventas, Usuarios> idusuarios;
 	public static volatile SingularAttribute<Ventas, String> descuento;
 	public static volatile SingularAttribute<Ventas, String> totaliva;
 	public static volatile SingularAttribute<Ventas, String> tipopago;

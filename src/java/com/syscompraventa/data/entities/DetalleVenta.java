@@ -33,17 +33,11 @@ public class DetalleVenta implements Serializable {
     @Column(name = "iddetalleventa")
     private Integer iddetalleventa;
     @Size(max = 50)
-    @Column(name = "numeroventa")
-    private String numeroventa;
-    @Size(max = 25)
-    @Column(name = "cedulacliente")
-    private String cedulacliente;
+    @Column(name = "unidad")
+    private String unidad;
     @Size(max = 100)
     @Column(name = "producto")
     private String producto;
-    @Size(max = 100)
-    @Column(name = "moneda")
-    private String moneda;
     @Column(name = "cantidadventa")
     private Integer cantidadventa;
     @Column(name = "fechaventa")
@@ -70,6 +64,21 @@ public class DetalleVenta implements Serializable {
     public DetalleVenta() {
     }
 
+    public DetalleVenta(Integer iddetalleventa, String unidad, String producto, Integer cantidadventa, Date fechaventa, String precioventa, String descuento, String total, Producto idproducto, Ventas idventas) {
+        this.iddetalleventa = iddetalleventa;
+        this.unidad = unidad;
+        this.producto = producto;
+        this.cantidadventa = cantidadventa;
+        this.fechaventa = fechaventa;
+        this.precioventa = precioventa;
+        this.descuento = descuento;
+        this.total = total;
+        this.idproducto = idproducto;
+        this.idventas = idventas;
+    }
+    
+    
+
     public DetalleVenta(Integer iddetalleventa) {
         this.iddetalleventa = iddetalleventa;
     }
@@ -82,21 +91,15 @@ public class DetalleVenta implements Serializable {
         this.iddetalleventa = iddetalleventa;
     }
 
-    public String getNumeroventa() {
-        return numeroventa;
+    public String getUnidad() {
+        return unidad;
     }
 
-    public void setNumeroventa(String numeroventa) {
-        this.numeroventa = numeroventa;
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
     }
 
-    public String getCedulacliente() {
-        return cedulacliente;
-    }
 
-    public void setCedulacliente(String cedulacliente) {
-        this.cedulacliente = cedulacliente;
-    }
 
     public String getProducto() {
         return producto;
@@ -104,14 +107,6 @@ public class DetalleVenta implements Serializable {
 
     public void setProducto(String producto) {
         this.producto = producto;
-    }
-
-    public String getMoneda() {
-        return moneda;
-    }
-
-    public void setMoneda(String moneda) {
-        this.moneda = moneda;
     }
 
     public Integer getCantidadventa() {

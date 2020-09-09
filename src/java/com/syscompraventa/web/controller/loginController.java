@@ -168,13 +168,10 @@ public class loginController implements Serializable {
     }
 
     public Usuarios getUsuarioLogeado() {
-        System.out.println("Usuario en usos  get"+usuarioLogeado.getApellidos());
         return usuarioLogeado;
     }
 
     public void setUsuarioLogeado(Usuarios usuarioLogeado) {
-        
-        System.out.println("Usuario en usos  set"+usuarioLogeado.getApellidos());
         
         this.usuarioLogeado = usuarioLogeado;
     }
