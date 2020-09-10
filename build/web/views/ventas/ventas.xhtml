@@ -40,13 +40,13 @@
 
                                 <h:panelGrid id="gridBuscarDatosCliente" columns="4" style="width: 98%; text-align: left">
                                     <p:outputLabel value="RUC: " style="font-weight: bold; width: 15%; "/>
-                                    <p:outputLabel value="#{ventasController.proveedorActual.cedulacliente}" style="width: 33%"/>
+                                    <p:outputLabel value="#{ventasController.clienteActual.cedulacliente}" style="width: 33%"/>
                                     <p:outputLabel value="Fecha: " style="font-weight: bold; width: 15%"/>
                                     <p:outputLabel value="#{ventasController.fechaSistema}" style="width: 33%"/>                                                     
                                     <p:outputLabel value="Rason social: " style="font-weight: bold;"/>
-                                    <p:outputLabel value="#{ventasController.proveedorActual.apellidocliente}"/>
+                                    <p:outputLabel value="#{ventasController.clienteActual.apellidocliente}"/>
                                     <p:outputLabel value="Direccion: " style="font-weight: bold;"/>
-                                    <p:outputLabel  value="#{ventasController.proveedorActual.direccioncliente}"/>                                                       
+                                    <p:outputLabel  value="#{ventasController.clienteActual.direccioncliente}"/>                                                       
                                 </h:panelGrid>  
 
                                 <p:separator/>
@@ -55,7 +55,7 @@
                                     <p:outputLabel  value="#{ventasController.empresaActual.nombreempresa}" style="width: 33%"/>
 
                                     <p:outputLabel value="Tipo de pago: " for="tipPago" style="font-weight: bold; width: 15%"/>
-                                    <p:selectOneMenu id="tipPago" value="#{ventasController.compraActual.tipopago}" disabled="#{!ventasController.enabled}">
+                                    <p:selectOneMenu id="tipPago" value="#{ventasController.ventaActual.tipopago}" disabled="#{!ventasController.enabled}">
                                         <f:selectItem itemValue="Efectivo" itemLabel="Efectivo"/>
                                         <f:selectItem itemValue="Credito" itemLabel="Credito"/>
                                         <f:selectItem itemValue="Targeta" itemLabel="Targeta"/>
@@ -67,7 +67,7 @@
                                           font-size: 14px;" size="200">
                                 <h:panelGrid columns="1" style="font-size: 24px; font-weight: bold; margin-top: 30px; margin: 0 auto;">
                                     FACTURA
-                                    <p:outputLabel value="#{ventasController.numeroCompra}"/>
+                                    <p:outputLabel value="#{ventasController.numeroVenta}"/>
                                 </h:panelGrid>
                             </p:layoutUnit>                            
                         </p:layout>
@@ -131,13 +131,13 @@
                         <p:separator/>
                         <h:panelGrid id="gridTotalFactura" columns="2" style=" font-size: 16px; text-align: right; width: 99%"> 
                             <p:outputLabel value="SUBTOTAL: $" />
-                            <p:outputLabel id="lblsubTot" value="#{ventasController.totalCompraIMP}" /> 
+                            <p:outputLabel id="lblsubTot" value="#{ventasController.totalVentaIMP}" /> 
                             <p:outputLabel value="TOTAL IVA: $"/>
                             <p:outputLabel id="lblIVA" value="#{ventasController.IVAIMP}"/>   
                             <p:outputLabel value="DESCUENTO:- $"/>
                             <p:outputLabel id="lblDesc" value="#{ventasController.desceuntoIMP}"/>   
                             <p:outputLabel value="TOTAL: $"/>
-                            <p:outputLabel id="lblTotal" value="#{ventasController.totalGenIMP}"/> 
+                            <p:outputLabel id="lblTotal" value="#{ventasController.totalFacturaIMP}"/> 
 
 
                         </h:panelGrid>
@@ -150,21 +150,21 @@
                     <p:dialog id="dlgClientes" widgetVar="dialogProveedor"  modal="true" resizable="false" appendTo="@(body)"
                               showEffect="explode" hideEffect="explode" header="Clientes">
                         <p:dataTable id="tablaClientes" paginator="true" paginatorPosition="top" style="width: 700px;"
-                                     var="client" value="#{clienteController.listaClientes}" emptyMessage="No hay datos de clientes">
+                                     var="clien" value="#{ventasController.listCliente}" emptyMessage="No hay datos de clientes">
                             <p:column headerText="Cedula">
-                                <h:outputText value="#{client.cedulacliente}"/>
+                                <h:outputText value="#{clien.cedulacliente}"/>
                             </p:column>
 
                             <p:column headerText="Nombre del cliente">
-                                <h:outputText value="#{client.apellidocliente}  #{ct.nombrecliente}"/>
+                                <h:outputText value="#{clien.apellidocliente} "/>
                             </p:column>
 
                             <p:column headerText="Direccion">
-                                <h:outputText value="#{client.direccioncliente}"/>
+                                <h:outputText value="#{clien.direccioncliente}"/>
                             </p:column>
 
                             <p:column headerText="">
-                                <p:commandButton value="Seleccionar" actionListener="#{ventasController.agregarDatosProveed(client)}"
+                                <p:commandButton value="Seleccionar" actionListener="#{ventasController.addDatosCliente(clien)}"
                                                  oncomplete="PF('dialogProveedor').hide();"
                                                  update=":formFactura:gridBuscarDatosCliente,:formFactura:mensajeGeneral"/>                                                                    
                             </p:column>                                                   
@@ -213,7 +213,7 @@
                     <p:commandButton id="btnImprimir1" value="IMPRIMIR" type="button" icon="pi pi-print" style="margin: 1%;" disabled="#{!ventasController.enabled}">
                         <p:printer target="Comprovante" />
                     </p:commandButton>
-                    <p:commandButton value="REGISTRAR" actionListener="#{ventasController.guardarCompra()}" style="margin: 1%;"
+                    <p:commandButton value="REGISTRAR" actionListener="#{ventasController.guardarVentas()}" style="margin: 1%;"
                                      action="#{ventasController.limpiarObj()}"
                                      disabled="#{!ventasController.enabled}"
                                      update=":formFactura, :formFactura:gridTotalFactura, :formFactura:capaDatosClienteFactura, :formFactura:tablaProductosFactura,:btnAct" />  

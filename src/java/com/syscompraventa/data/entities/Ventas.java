@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
@@ -15,12 +19,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author DELL
+ */
 @Entity
 @Table(name = "sistcompraventa.ventas")
 @XmlRootElement
@@ -69,6 +79,8 @@ public class Ventas implements Serializable {
     @Size(max = 45)
     @Column(name = "total")
     private String total;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idventas")
+    private List<DetalleVenta> detalleVentaList;
     @JoinColumn(name = "idcliente", referencedColumnName = "idcliente")
     @ManyToOne(optional = false)
     private Cliente idcliente;
@@ -185,6 +197,15 @@ public class Ventas implements Serializable {
 
     public void setTotal(String total) {
         this.total = total;
+    }
+
+    @XmlTransient
+    public List<DetalleVenta> getDetalleVentaList() {
+        return detalleVentaList;
+    }
+
+    public void setDetalleVentaList(List<DetalleVenta> detalleVentaList) {
+        this.detalleVentaList = detalleVentaList;
     }
 
     public Cliente getIdcliente() {

@@ -55,7 +55,6 @@ public class ComprasFacade extends AbstractFacade<Compras> {
     }
 
     public List<Compras> listarProductosXMes(String mes) {
-        System.out.println("LLega a facede por mes");
 
         String jpql = null;
         switch (mes) {
@@ -99,7 +98,6 @@ public class ComprasFacade extends AbstractFacade<Compras> {
                 break;
         }
         Query q = em.createQuery(jpql);
-        System.out.println(" ..................." + q.getResultList());
         return q.getResultList();
 
     }

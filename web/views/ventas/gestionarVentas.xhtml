@@ -16,7 +16,7 @@
                 <h:form id="ComprasListForm">
                     <p:panel header="ADMINISTRACION DE COMPRAS">
                         <p:dataTable id="datalist" value="#{ventasController.items}" var="item"
-                                     selectionMode="single" selection="#{ventasController.compraActual}"
+                                     selectionMode="single" selection="#{ventasController.ventaActual}"
                                      paginator="true"
                                      rowKey="#{item.idventas}"
                                      rows="10"
@@ -73,17 +73,17 @@
 
                             <f:facet name="footer">
                                 <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
-                                                 disabled="#{empty ventasController.compraActual}"
+                                                 disabled="#{empty ventasController.ventaActual}"
                                                  update=":ComprasViewForm" 
                                                  oncomplete="PF('ComprasViewDialog').show()" />
 
                                 <p:commandButton id="btnEdite"   icon="ui-icon-pencil" value="Editar" title="Detalle" 
-                                                 disabled="#{empty ventasController.compraActual}"
+                                                 disabled="#{empty ventasController.ventaActual}"
                                                  update=":ComprasEditForm" 
                                                  oncomplete="PF('ComprasEditDialog').show()" />
 
                                 <p:commandButton id="btnDelete" icon="ui-icon-trash"  value="Eliminar" title="Eliminar"
-                                                 disabled="#{empty ventasController.compraActual}"
+                                                 disabled="#{empty ventasController.ventaActual}"
                                                  update=":ComprasViewForm" 
                                                  oncomplete="PF('ComprasViewDialog').show()"  />
                             </f:facet>
@@ -96,7 +96,7 @@
                 <p:dialog id="ComprasEditDlg" widgetVar="ComprasEditDialog" modal="true" resizable="false" appendTo="@(body)" header="Editar">
                     <h:form id="ComprasEditForm">
                         <h:panelGroup id="display">
-                            <p:panelGrid columns="2" rendered="#{ventasController.compraActual != null}">
+                            <p:panelGrid columns="2" rendered="#{ventasController.ventaActual != null}">
                                 <p:outputLabel value="#{mensajes.EditComprasLabel_idcompras}" for="idcompras" />
                                 <p:inputText id="idcompras" value="#{comprasController.compraActual.idcompras}" title="#{mensajes.EditComprasTitle_idcompras}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idcompras}"/>
                                 <p:outputLabel value="#{mensajes.EditComprasLabel_fechacompra}" for="fechacompra" />
@@ -138,7 +138,7 @@
                 <p:dialog id="ComprasViewDlg" widgetVar="ComprasViewDialog" modal="true" resizable="false" appendTo="@(body)" header="Ver">
                     <h:form id="ComprasViewForm">
                         <h:panelGroup id="display">
-                            <p:panelGrid columns="2" rendered="#{ventasController.compraActual != null}">
+                            <p:panelGrid columns="2" rendered="#{ventasController.ventaActual != null}">
                                 <h:outputText value="#{mensajes.ViewComprasLabel_idcompras}"/>
                                 <h:outputText value="#{comprasController.compraActual.idcompras}" title="#{mensajes.ViewComprasTitle_idcompras}"/>
                                 <h:outputText value="#{mensajes.ViewComprasLabel_fechacompra}"/>

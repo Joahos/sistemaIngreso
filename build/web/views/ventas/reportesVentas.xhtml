@@ -32,7 +32,7 @@
 
                     <p:panel header="LISTA DE VENTAS EFECTUADAS">
                         <p:dataTable id="datalist" value="#{ventasController.items}" var="item"
-                                     selectionMode="single" selection="#{ventasController.compraActual}"
+                                     selectionMode="single" selection="#{ventasController.ventaActual}"
                                      paginator="true" rowKey="#{item.idventas}" rows="10"
                                      rowsPerPageTemplate="10,20,30" emptyMessage="No existe registros" >
 
@@ -100,41 +100,41 @@
                         <h:panelGroup id="display"  >
 
                             <p:panel header="INFORMACION" style="width: 1000px;">
-                                <p:panelGrid columns="6" rendered="#{ventasController.compraActual != null}">
+                                <p:panelGrid columns="6" rendered="#{ventasController.ventaActual != null}">
                                     <h:outputText value="Comprobante: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.idventas}" />
+                                    <h:outputText value="#{ventasController.ventaActual.idventas}" />
 
                                     <h:outputText value="Fecha: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.fechaventa}" >
+                                    <h:outputText value="#{ventasController.ventaActual.fechaventa}" >
                                         <f:convertDateTime pattern="MM/dd/yyyy" />
                                     </h:outputText>
 
                                     <h:outputText value="Cantidad: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.numeroventa}" />
+                                    <h:outputText value="#{ventasController.ventaActual.numeroventa}" />
 
                                     <h:outputText value="Cliente: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.idcliente.apellidocliente}" />
+                                    <h:outputText value="#{ventasController.ventaActual.idcliente.apellidocliente}" />
 
                                     <h:outputText value="CedulaProveedor: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.cedulacliente}"/>
+                                    <h:outputText value="#{ventasController.ventaActual.cedulacliente}"/>
 
                                     <h:outputText value="Vendedor: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.vendedor}" />
+                                    <h:outputText value="#{ventasController.ventaActual.vendedor}" />
 
                                     <h:outputText value="Moneda: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.moneda}"/>
+                                    <h:outputText value="#{ventasController.ventaActual.moneda}"/>
 
                                     <h:outputText value="Subtotal: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.subtotal}" />
+                                    <h:outputText value="#{ventasController.ventaActual.subtotal}" />
 
                                     <h:outputText value="IVA: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.totaliva}" />
+                                    <h:outputText value="#{ventasController.ventaActual.totaliva}" />
 
                                     <h:outputText value="Total: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.total}"/>
+                                    <h:outputText value="#{ventasController.ventaActual.total}"/>
 
                                     <h:outputText value="Tipo de pago: " style="font-weight: bold;"/>
-                                    <h:outputText value="#{ventasController.compraActual.tipopago}" />
+                                    <h:outputText value="#{ventasController.ventaActual.tipopago}" />
 
                                 </p:panelGrid>
                             </p:panel>

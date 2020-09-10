@@ -23,7 +23,7 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         super(Ventas.class);
     }
 
-    public Ventas obtenerTotalRegistrosEnCompra() throws Exception{
+    public Ventas obtenerTotalRegistrosEnCompra() throws Exception {
         String jpql = "SELECT v FROM Ventas v";
         Query q = em.createQuery(jpql);
         List<Ventas> lista = q.getResultList();
@@ -39,16 +39,21 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         Query q = em.createQuery(jpql).setMaxResults(1);
         return (Ventas) q.getSingleResult();
     }
-    
-       public List<Ventas> listarProductosXFecha(Date date1, Date date2) {
+
+    public List<Ventas> listarProductosXFecha(Date date1, Date date2) {
         String jpql = "SELECT v FROM Ventas v WHERE v.fechaventa Between :dat1 And :dat2";
         Query q = em.createQuery(jpql);
         q.setParameter("dat1", date1);
         q.setParameter("dat2", date2);
         return q.getResultList();
     }
-       
-        public List<Ventas> listarProductosXMes(String mes) {
+
+    public boolean guardarVentas(Ventas vents) throws Exception {
+        em.persist(vents);
+        return true;
+    }
+
+    public List<Ventas> listarProductosXMes(String mes) {
         System.out.println("LLega a facede por mes");
 
         String jpql = null;
@@ -97,6 +102,5 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         return q.getResultList();
 
     }
-
 
 }

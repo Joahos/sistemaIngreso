@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
@@ -21,7 +25,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author DELL
+ */
 @Entity
 @Table(name = "sistcompraventa.compras")
 @XmlRootElement
@@ -35,51 +44,48 @@ public class Compras implements Serializable {
     @Basic(optional = false)
     @Column(name = "idcompras")
     private Integer idcompras;
-    @Column(name = "fechacompra")//
+    @Column(name = "fechacompra")
     @Temporal(TemporalType.DATE)
     private Date fechacompra;
     @Size(max = 25)
-    @Column(name = "numerocompra")//
+    @Column(name = "numerocompra")
     private String numerocompra;
     @Size(max = 100)
-    @Column(name = "proveedor")//
+    @Column(name = "proveedor")
     private String proveedor;
     @Size(max = 25)
-    @Column(name = "cedulaproveedor")//
+    @Column(name = "cedulaproveedor")
     private String cedulaproveedor;
     @Size(max = 100)
-    @Column(name = "comprador")//
+    @Column(name = "comprador")
     private String comprador;
     @Size(max = 100)
-    @Column(name = "moneda")//
+    @Column(name = "moneda")
     private String moneda;
     @Size(max = 100)
     @Column(name = "tipopago")
     private String tipopago;
-    @Column(name = "estado")//
+    @Column(name = "estado")
     private Boolean estado;
     @Size(max = 45)
-    @Column(name = "subtotal")//
+    @Column(name = "subtotal")
     private String subtotal;
     @Size(max = 45)
-    @Column(name = "totaliva")//
+    @Column(name = "totaliva")
     private String totaliva;
     @Size(max = 45)
-    @Column(name = "descuento")//
+    @Column(name = "descuento")
     private String descuento;
     @Size(max = 45)
-    @Column(name = "total")//
+    @Column(name = "total")
     private String total;
-    @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")//
+    @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
-    @JoinColumn(name = "idproveedor", referencedColumnName = "idproveedor")//
+    @JoinColumn(name = "idproveedor", referencedColumnName = "idproveedor")
     @ManyToOne(optional = false)
     private Proveedor idproveedor;
-//    @JoinColumn(name = "idusuarios", referencedColumnName = "idusuarios")
-//    @ManyToOne(optional = false)
-//    private Usuarios idusuarios;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idcompras")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcompras")
     private List<DetalleCompra> detalleCompraList;
 
     public Compras() {
@@ -209,13 +215,14 @@ public class Compras implements Serializable {
         this.idproveedor = idproveedor;
     }
 
-//    public Usuarios getIdusuarios() {
-//        return idusuarios;
-//    }
-//
-//    public void setIdusuarios(Usuarios idusuarios) {
-//        this.idusuarios = idusuarios;
-//    }
+    @XmlTransient
+    public List<DetalleCompra> getDetalleCompraList() {
+        return detalleCompraList;
+    }
+
+    public void setDetalleCompraList(List<DetalleCompra> detalleCompraList) {
+        this.detalleCompraList = detalleCompraList;
+    }
 
     @Override
     public int hashCode() {

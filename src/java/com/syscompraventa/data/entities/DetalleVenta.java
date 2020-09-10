@@ -1,8 +1,11 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author DELL
+ */
 @Entity
 @Table(name = "sistcompraventa.detalle_venta")
 @XmlRootElement
@@ -40,11 +45,8 @@ public class DetalleVenta implements Serializable {
     private String producto;
     @Column(name = "cantidadventa")
     private Integer cantidadventa;
-    @Column(name = "fechaventa")
-    @Temporal(TemporalType.DATE)
-    private Date fechaventa;
     @Column(name = "estado")
-    private Boolean estado;
+    private Boolean estado = true;
     @Size(max = 45)
     @Column(name = "precioventa")
     private String precioventa;
@@ -64,12 +66,11 @@ public class DetalleVenta implements Serializable {
     public DetalleVenta() {
     }
 
-    public DetalleVenta(Integer iddetalleventa, String unidad, String producto, Integer cantidadventa, Date fechaventa, String precioventa, String descuento, String total, Producto idproducto, Ventas idventas) {
+    public DetalleVenta(Integer iddetalleventa, String unidad, String producto, Integer cantidadventa, String precioventa, String descuento, String total, Producto idproducto, Ventas idventas) {
         this.iddetalleventa = iddetalleventa;
         this.unidad = unidad;
         this.producto = producto;
         this.cantidadventa = cantidadventa;
-        this.fechaventa = fechaventa;
         this.precioventa = precioventa;
         this.descuento = descuento;
         this.total = total;
@@ -99,8 +100,6 @@ public class DetalleVenta implements Serializable {
         this.unidad = unidad;
     }
 
-
-
     public String getProducto() {
         return producto;
     }
@@ -115,14 +114,6 @@ public class DetalleVenta implements Serializable {
 
     public void setCantidadventa(Integer cantidadventa) {
         this.cantidadventa = cantidadventa;
-    }
-
-    public Date getFechaventa() {
-        return fechaventa;
-    }
-
-    public void setFechaventa(Date fechaventa) {
-        this.fechaventa = fechaventa;
     }
 
     public Boolean getEstado() {

@@ -34,5 +34,12 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         Query q = em.createQuery(jpql);
         return q.getResultList();
     }
+    
+        public Cliente obtenerCliente(Cliente idClient) {
+        String jpql = "SELECT c FROM Cliente c where c.idcliente=:idCli";
+        Query q = em.createQuery(jpql);
+        q.setParameter("idCli", idClient.getIdcliente());
+        return  (Cliente) q.getSingleResult();
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.syscompraventa.data.entities;
 
 import javax.annotation.Generated;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -8,6 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Permisos.class)
 public abstract class Permisos_ {
 
+	public static volatile ListAttribute<Permisos, Usuarios> usuariosList;
 	public static volatile SingularAttribute<Permisos, Integer> idpermisos;
 	public static volatile SingularAttribute<Permisos, String> nombre;
 

@@ -9,6 +9,7 @@
     <f:view contentType="text/html">
         <h:head>
             <f:facet name="first">
+                <f:event type="preRenderView" listener="#{filtroLogin.autenticacionUnica()}" />
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>Compras-Ventas</title>
                 <h:outputStylesheet name="/css/personalizado.css"/>

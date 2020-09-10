@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
@@ -21,7 +25,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author DELL
+ */
 @Entity
 @Table(name = "sistcompraventa.usuarios")
 @XmlRootElement
@@ -66,24 +75,20 @@ public class Usuarios implements Serializable {
     private Date fechaingreso;
     @Column(name = "estado")
     private Boolean estado;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuarios")
     private List<Cliente> clienteList;
-//    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
-//    private List<Compras> comprasList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuarios")
     private List<Categoria> categoriaList;
-//    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
-//    private List<Ventas> ventasList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuarios")
     private List<Proveedor> proveedorList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idusuarios")
     private List<Producto> productoList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idusuarios")
-    private List<UsuarioPermiso> usuarioPermisoList;
-    
     @JoinColumn(name = "idempresa", referencedColumnName = "idempresa")
     @ManyToOne(optional = false)
     private Empresa idempresa;
+    @JoinColumn(name = "idpermisos", referencedColumnName = "idpermisos")
+    @ManyToOne
+    private Permisos idpermisos;
 
     public Usuarios() {
     }
@@ -188,12 +193,56 @@ public class Usuarios implements Serializable {
         this.estado = estado;
     }
 
+    @XmlTransient
+    public List<Cliente> getClienteList() {
+        return clienteList;
+    }
+
+    public void setClienteList(List<Cliente> clienteList) {
+        this.clienteList = clienteList;
+    }
+
+    @XmlTransient
+    public List<Categoria> getCategoriaList() {
+        return categoriaList;
+    }
+
+    public void setCategoriaList(List<Categoria> categoriaList) {
+        this.categoriaList = categoriaList;
+    }
+
+    @XmlTransient
+    public List<Proveedor> getProveedorList() {
+        return proveedorList;
+    }
+
+    public void setProveedorList(List<Proveedor> proveedorList) {
+        this.proveedorList = proveedorList;
+    }
+
+    @XmlTransient
+    public List<Producto> getProductoList() {
+        return productoList;
+    }
+
+    public void setProductoList(List<Producto> productoList) {
+        this.productoList = productoList;
+    }
+
     public Empresa getIdempresa() {
         return idempresa;
     }
 
     public void setIdempresa(Empresa idempresa) {
         this.idempresa = idempresa;
+    }
+
+    public Permisos getIdpermisos() {
+        return idpermisos;
+    }
+
+    public void setIdpermisos(Permisos idpermisos) {
+        this.idpermisos = idpermisos;
     }
 
     @Override

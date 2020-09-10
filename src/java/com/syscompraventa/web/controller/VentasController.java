@@ -1,5 +1,6 @@
 package com.syscompraventa.web.controller;
 
+import com.syscompraventa.business.facade.ClienteFacade;
 import com.syscompraventa.business.facade.DetalleVentaFacade;
 import com.syscompraventa.business.facade.EmpresaFacade;
 import com.syscompraventa.business.facade.ProductoFacade;
@@ -39,6 +40,8 @@ import org.primefaces.event.RowEditEvent;
 public class VentasController implements Serializable {
 
     @EJB
+    private ClienteFacade clienteFacade;
+    @EJB
     private com.syscompraventa.business.facade.VentasFacade ventasFacade;
     @EJB
     private ProductoFacade productoFacad;
@@ -46,24 +49,26 @@ public class VentasController implements Serializable {
     private DetalleVentaFacade detalleVentaFacade;
     @EJB
     private EmpresaFacade empresaFacade;
+
     private static final Logger LOG = Logger.getLogger(VentasController.class.getName());
     DecimalFormat des = new DecimalFormat("#0.00");
 
     private List<Ventas> items;
     private List<Ventas> listVentas;
     private List<DetalleVenta> listDetVenta;
+    private List<Cliente> listCliente;
 
     private boolean enabled;
-    private Ventas selected, compraNumero, compraActual;
+    private Ventas selected, ventaNumero, ventaActual;
     private Producto productoActual, prodSelec;
-    private Cliente proveedorActual;
+    private Cliente clienteActual;
     private Empresa empresaActual;
 
     private Integer cantProducto;
     Date fechaUno, fechaDos;
-    private long numeroCompra;
-    private Float totalCompra;
-    private String fechaSistema, totalCompraIMP, IVAIMP, desceuntoIMP, totalGenIMP, mes;
+    private long numeroVenta;
+    private Float totalVenta;
+    private String fechaSistema, totalVentaIMP, IVAIMP, desceuntoIMP, totalFacturaIMP, mes;
 
     public VentasController() {
     }
@@ -73,19 +78,19 @@ public class VentasController implements Serializable {
     public void inicializar() {
 
         try {
-            totalCompra = new Float(0);
-            numeroCompra = 0;
-            compraNumero = new Ventas();
-            compraActual = new Ventas();
+            totalVenta = new Float(0);
+            numeroVenta = 0;
+            ventaNumero = new Ventas();
+            ventaActual = new Ventas();
             cantProducto = null;
             selected = new Ventas();
-            proveedorActual = new Cliente();
             listDetVenta = new ArrayList<>();
             listVentas = new ArrayList<>();
             productoActual = new Producto();
             prodSelec = new Producto();
             empresaActual = new Empresa();
-            fechaSistema = totalCompraIMP = IVAIMP = desceuntoIMP = totalGenIMP = mes = new String();
+            listCliente = clienteFacade.listarClientes();
+            fechaSistema = totalVentaIMP = IVAIMP = desceuntoIMP = totalFacturaIMP = mes = new String();
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "error al iniciar", e);
@@ -96,11 +101,11 @@ public class VentasController implements Serializable {
         productoActual = null;
         fechaSistema = "";
         empresaActual = null;
-        numeroCompra = 0;
+        numeroVenta = 0;
         listDetVenta = new ArrayList<>();
         listVentas = new ArrayList<>();
-        proveedorActual = null;
-        fechaSistema = totalCompraIMP = IVAIMP = desceuntoIMP = totalGenIMP = null;
+        clienteActual = null;
+        fechaSistema = totalVentaIMP = IVAIMP = desceuntoIMP = totalFacturaIMP = null;
         disableButton();
     }
 
@@ -108,13 +113,14 @@ public class VentasController implements Serializable {
 
         try {
             empresaActual = empresaFacade.sacarEmpresa();
-            compraNumero = ventasFacade.obtenerTotalRegistrosEnCompra();
-            if (compraNumero == null) {
-                numeroCompra = Long.valueOf("1");
+            ventaActual.setIdempresa(empresaActual);
+            ventaNumero = ventasFacade.obtenerTotalRegistrosEnCompra();
+            if (ventaNumero == null) {
+                numeroVenta = Long.valueOf("1");
             } else {
-                compraNumero = ventasFacade.obtenerUltimoRegistro();
-                numeroCompra = Long.valueOf(compraNumero.getIdventas() + 1);
-                totalCompra = new Float(0);// BigDecimal("0");
+                ventaNumero = ventasFacade.obtenerUltimoRegistro();
+                numeroVenta = Long.valueOf(ventaNumero.getIdventas() + 1);
+                totalVenta = new Float(0);// BigDecimal("0");
             }
 
         } catch (Exception e) {
@@ -122,18 +128,12 @@ public class VentasController implements Serializable {
         }
     }
 
-    public void agregarDatosProveed(Cliente idProveed) {
-        System.out.println(" ,,,,,,,,,,,,,,,,,,,,,,," + idProveed);
-        FacesContext context = FacesContext.getCurrentInstance();
-        try {
-            proveedorActual = idProveed;
-            compraActual.setIdcliente(idProveed);//-
-            // = proveedorFacade.obtenerProveedor(idProveed); para buscar
-            System.out.println("..........." + compraActual.getIdcliente().getApellidocliente());
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Proveedor agregado"));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    public void addDatosCliente(Cliente addClient) {
+        System.out.println("empieza ..........");
+        clienteActual = clienteFacade.obtenerCliente(addClient);
+        System.out.println("............................mmmm...........................");
+        ventaActual.setIdcliente(clienteActual);
+        System.out.println("regresando.................." + ventaActual.getIdcliente().getIdcliente());
     }
 
     public String getFechaSistema() {
@@ -165,7 +165,7 @@ public class VentasController implements Serializable {
 
                 Float descuentoL = (Float.valueOf(productoActual.getPrecioventa()) * cantProducto) - ((Float.valueOf(productoActual.getPrecioventa()) * cantProducto) * Float.valueOf("0.01"));
 
-                this.listDetVenta.add(new DetalleVenta(null, productoActual.getUnidad(), productoActual.getProducto(), cantProducto, new Date(), productoActual.getPrecioventa(),
+                this.listDetVenta.add(new DetalleVenta(null, productoActual.getUnidad(), productoActual.getProducto(), cantProducto, productoActual.getPrecioventa(),
                         des.format(descuentoL), des.format(Float.valueOf(productoActual.getPrecioventa()) * cantProducto), productoActual, null));
 
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Producto agregado correctamente"));
@@ -200,27 +200,27 @@ public class VentasController implements Serializable {
             }).forEachOrdered((item) -> {
                 item.setTotal(String.valueOf(des.format(totalCompraXProducto)));
             });
-            totalCompra = totalCompra + totalCompraXProducto;
-            totalCompraIMP = des.format(totalCompra);
+            totalVenta = totalVenta + totalCompraXProducto;
+            totalVentaIMP = des.format(totalVenta);
             ////
 
-            compraActual.setTotal(des.format(totalCompra));
-            IVA = (float) (totalCompra * 0.12);
+            ventaActual.setTotal(des.format(totalVenta));
+            IVA = (float) (totalVenta * 0.12);
             IVAIMP = des.format(IVA);
 
-            if (totalCompra >= 0 && totalCompra < 100) {
-                descuento = (totalCompra + IVA) * (float) 0.05;
+            if (totalVenta >= 0 && totalVenta < 100) {
+                descuento = (totalVenta + IVA) * (float) 0.05;
 
-            } else if (totalCompra >= 100 && totalCompra < 200) {
-                descuento = (totalCompra + IVA) * (float) 0.08;
+            } else if (totalVenta >= 100 && totalVenta < 200) {
+                descuento = (totalVenta + IVA) * (float) 0.08;
 
-            } else if (totalCompra >= 200) {
-                descuento = (totalCompra + IVA) * (float) 0.11;
+            } else if (totalVenta >= 200) {
+                descuento = (totalVenta + IVA) * (float) 0.11;
             }
 
             desceuntoIMP = des.format(descuento);
-            totalGeneral = (totalCompra + IVA) - descuento;
-            totalGenIMP = des.format(totalGeneral);
+            totalGeneral = (totalVenta + IVA) - descuento;
+            totalFacturaIMP = des.format(totalGeneral);
 
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
@@ -251,34 +251,31 @@ public class VentasController implements Serializable {
         }
     }
 
-    public void guardarCompra() {
+    public void guardarVentas() {
+        System.out.println("....regresando.................." + ventaActual.getIdcliente().getIdcliente());
         FacesContext context = FacesContext.getCurrentInstance();
         try {
 
-            compraActual.setNumeroventa(String.valueOf(numeroCompra));
-            //    compraActual.setNumerocompra(String.valueOf(numeroCompra));
-            compraActual.setEstado(true);
-            compraActual.setFechaventa(new Date());
-            compraActual.setCliente(proveedorActual.getApellidocliente() + " " + proveedorActual.getNombrecliente());
-            compraActual.setCedulacliente(proveedorActual.getCedulacliente());
-            compraActual.setVendedor(empresaActual.getNombreempresa());
-            compraActual.setMoneda("Dolar");
-//            compraActual.setIdempresa(empresaActual);//-
-//            System.out.println(".............."+proveedorActual);
-//            System.out.println(".............."+proveedorActual.getApellidocliente());
-//            compraActual.setIdcliente(proveedorActual);
-            //     compraActual.setIdusuarios(usuariosFacade.find(userLogeado.getIdusuarios()));//-
-            compraActual.setSubtotal(totalCompraIMP);
-            compraActual.setTotaliva(IVAIMP);
-            compraActual.setDescuento(desceuntoIMP);
-            compraActual.setTotal(totalGenIMP);
+            ventaActual.setNumeroventa(String.valueOf(numeroVenta));
+            ventaActual.setEstado(true);
+            ventaActual.setFechaventa(new Date());
+            ventaActual.setCliente(clienteActual.getApellidocliente());
+            ventaActual.setCedulacliente(clienteActual.getCedulacliente());
+            ventaActual.setVendedor(empresaActual.getNombreempresa());
+            ventaActual.setMoneda("Dolar");
+            ventaActual.setSubtotal(totalVentaIMP);
+            ventaActual.setTotaliva(IVAIMP);
+            ventaActual.setDescuento(desceuntoIMP);
+            ventaActual.setTotal(totalFacturaIMP);
+       //     ventaActual.setIdempresa(empresaActual);
 
-            persist(PersistAction.CREATE, ResourceBundle.getBundle("/mensajes").getString("VentasCreated"));
-
-            compraActual = ventasFacade.obtenerUltimoRegistro();
+            System.out.println(".................aa...................");
+            ventasFacade.guardarVentas(ventaActual);
+          //  persist(PersistAction.CREATE, ResourceBundle.getBundle("/mensajes").getString("VentasCreated"));
+            ventaActual = ventasFacade.obtenerUltimoRegistro();
 
             for (DetalleVenta item : listDetVenta) {
-                item.setIdventas(compraActual);
+                item.setIdventas(ventaActual);
                 detalleVentaFacade.guardarVentaDetalleCompra(item);
             }
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Producto agregado correctamente"));
@@ -286,8 +283,8 @@ public class VentasController implements Serializable {
             System.out.println(e.getMessage());
         }
     }
-    
-      public void enableButton() {
+
+    public void enableButton() {
         enabled = true;
     }
 
@@ -298,7 +295,7 @@ public class VentasController implements Serializable {
     //{
     public void obtenerProductos() {
         try {
-            listDetVenta = detalleVentaFacade.listarCompraXID(compraActual.getIdventas());
+            listDetVenta = detalleVentaFacade.listarCompraXID(ventaActual.getIdventas());
         } catch (Exception ex) {
             Logger.getLogger(ComprasController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -319,13 +316,12 @@ public class VentasController implements Serializable {
         return enabled;
     }
 
-
-    public Cliente getProveedorActual() {
-        return proveedorActual;
+    public Cliente getClienteActual() {
+        return clienteActual;
     }
 
-    public void setProveedorActual(Cliente proveedorActual) {
-        this.proveedorActual = proveedorActual;
+    public void setClienteActual(Cliente clienteActual) {
+        this.clienteActual = clienteActual;
     }
 
     public Empresa getEmpresaActual() {
@@ -336,20 +332,20 @@ public class VentasController implements Serializable {
         this.empresaActual = empresaActual;
     }
 
-    public Ventas getCompraActual() {
-        return compraActual;
+    public Ventas getVentaActual() {
+        return ventaActual;
     }
 
-    public void setCompraActual(Ventas compraActual) {
-        this.compraActual = compraActual;
+    public void setVentaActual(Ventas ventaActual) {
+        this.ventaActual = ventaActual;
     }
 
-    public long getNumeroCompra() {
-        return numeroCompra;
+    public long getNumeroVenta() {
+        return numeroVenta;
     }
 
-    public void setNumeroCompra(long numeroCompra) {
-        this.numeroCompra = numeroCompra;
+    public void setNumeroVenta(long numeroVenta) {
+        this.numeroVenta = numeroVenta;
     }
 
     public List<DetalleVenta> getListDetVenta() {
@@ -360,12 +356,12 @@ public class VentasController implements Serializable {
         this.listDetVenta = listDetVenta;
     }
 
-    public String getTotalCompraIMP() {
-        return totalCompraIMP;
+    public String getTotalVentaIMP() {
+        return totalVentaIMP;
     }
 
-    public void setTotalCompraIMP(String totalCompraIMP) {
-        this.totalCompraIMP = totalCompraIMP;
+    public void setTotalVentaIMP(String totalVentaIMP) {
+        this.totalVentaIMP = totalVentaIMP;
     }
 
     public String getIVAIMP() {
@@ -384,12 +380,12 @@ public class VentasController implements Serializable {
         this.desceuntoIMP = desceuntoIMP;
     }
 
-    public String getTotalGenIMP() {
-        return totalGenIMP;
+    public String getTotalFacturaIMP() {
+        return totalFacturaIMP;
     }
 
-    public void setTotalGenIMP(String totalGenIMP) {
-        this.totalGenIMP = totalGenIMP;
+    public void setTotalFacturaIMP(String totalFacturaIMP) {
+        this.totalFacturaIMP = totalFacturaIMP;
     }
 
     public Integer getCantProducto() {
@@ -431,9 +427,16 @@ public class VentasController implements Serializable {
     public void setMes(String mes) {
         this.mes = mes;
     }
-    
-    
 
+    public List<Cliente> getListCliente() {
+        return listCliente;
+    }
+
+    public void setListCliente(List<Cliente> listCliente) {
+        this.listCliente = listCliente;
+    }
+
+    
     /////////////////}
     public Ventas getSelected() {
         return selected;

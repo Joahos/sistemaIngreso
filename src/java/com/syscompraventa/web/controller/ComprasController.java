@@ -163,6 +163,9 @@ public class ComprasController implements Serializable {
             } else {
                 System.out.println("viendo ..........." + prodSelec.getProducto());
                 productoActual = productoFacad.obtenerProducto(prodSelec);////////////
+             //   this.listDetCompra.add(new DetalleCompra(null, productoActual.getProducto(),  productoActual.getPresentacion(), productoActual.getUnidad(), cantProducto, true, totalCompraIMP, mes, compraActual, prodSelec));
+                
+                
                 this.listDetCompra.add(new DetalleCompra(null, productoActual.getProducto(), productoActual.getPresentacion(), productoActual.getUnidad(), cantProducto,
                         productoActual.getPrecioventa(), des.format(Float.valueOf(prodSelec.getPrecioventa()) * Float.valueOf(String.valueOf(cantProducto))), null, productoActual));
 

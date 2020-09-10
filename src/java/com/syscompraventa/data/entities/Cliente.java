@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
@@ -23,6 +27,10 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author DELL
+ */
 @Entity
 @Table(name = "sistcompraventa.cliente")
 @XmlRootElement
@@ -150,6 +158,15 @@ public class Cliente implements Serializable {
 
     public void setIdusuarios(Usuarios idusuarios) {
         this.idusuarios = idusuarios;
+    }
+
+    @XmlTransient
+    public List<Ventas> getVentasList() {
+        return ventasList;
+    }
+
+    public void setVentasList(List<Ventas> ventasList) {
+        this.ventasList = ventasList;
     }
 
     @Override

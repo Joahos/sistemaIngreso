@@ -61,7 +61,6 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
         }
     }
 
-    
 
     public List<Usuarios> listarUsuarios() {
         String jpql = "SELECT u FROM Usuarios u WHERE u.estado = TRUE order by u.apellidos";

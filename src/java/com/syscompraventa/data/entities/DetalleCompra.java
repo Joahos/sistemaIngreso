@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
@@ -16,6 +20,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author DELL
+ */
 @Entity
 @Table(name = "sistcompraventa.detalle_compra")
 @XmlRootElement
@@ -41,7 +49,7 @@ public class DetalleCompra implements Serializable {
     @Column(name = "cantidadcompra")
     private Integer cantidadcompra;
     @Column(name = "estado")
-    private Boolean estado;
+    private Boolean estado = true;
     @Size(max = 45)
     @Column(name = "preciocompra")
     private String preciocompra;
@@ -58,13 +66,7 @@ public class DetalleCompra implements Serializable {
     public DetalleCompra() {
     }
 
-    public DetalleCompra(Integer iddetallecompra) {
-        this.iddetallecompra = iddetallecompra;
-    }
-/////////{
-
-    public DetalleCompra(Integer iddetallecompra, String producto, String presentacion, String unidad, Integer cantidadcompra, 
-            String preciocompra, String total, Compras idcompras, Producto idproducto) {
+    public DetalleCompra(Integer iddetallecompra, String producto, String presentacion, String unidad, Integer cantidadcompra, String preciocompra, String total, Compras idcompras, Producto idproducto) {
         this.iddetallecompra = iddetallecompra;
         this.producto = producto;
         this.presentacion = presentacion;
@@ -74,10 +76,14 @@ public class DetalleCompra implements Serializable {
         this.total = total;
         this.idcompras = idcompras;
         this.idproducto = idproducto;
-        
     }
     
-    //}
+    
+    
+
+    public DetalleCompra(Integer iddetallecompra) {
+        this.iddetallecompra = iddetallecompra;
+    }
 
     public Integer getIddetallecompra() {
         return iddetallecompra;
@@ -119,7 +125,6 @@ public class DetalleCompra implements Serializable {
         this.cantidadcompra = cantidadcompra;
     }
 
-
     public Boolean getEstado() {
         return estado;
     }
@@ -135,14 +140,6 @@ public class DetalleCompra implements Serializable {
     public void setPreciocompra(String preciocompra) {
         this.preciocompra = preciocompra;
     }
-//
-//    public String getDescuento() {
-//        return descuento;
-//    }
-//
-//    public void setDescuento(String descuento) {
-//        this.descuento = descuento;
-//    }
 
     public String getTotal() {
         return total;

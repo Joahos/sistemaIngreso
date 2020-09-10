@@ -2,13 +2,11 @@ package com.syscompraventa.web.controller;
 
 import auxiliar.validations;
 import com.syscompraventa.business.facade.PermisosFacade;
-import com.syscompraventa.business.facade.UsuarioPermisoFacade;
 import com.syscompraventa.data.entities.Usuarios;
 import com.syscompraventa.web.controller.util.JsfUtil;
 import com.syscompraventa.web.controller.util.JsfUtil.PersistAction;
 import com.syscompraventa.business.facade.UsuariosFacade;
 import com.syscompraventa.data.entities.Permisos;
-import com.syscompraventa.data.entities.UsuarioPermiso;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,84 +29,33 @@ import javax.faces.view.ViewScoped;
 public class UsuariosController implements Serializable {
 
     @EJB
-    private UsuarioPermisoFacade usuarioPermisoFacade;
-
-    @EJB
     private PermisosFacade permisosFacade;
-
     @EJB
-    private com.syscompraventa.business.facade.UsuariosFacade ejbFacade;
+    private UsuariosFacade usuariosFacade;
     private static final Logger LOG = Logger.getLogger(UsuariosController.class.getName());
 
     private List<Usuarios> listaUsuarios;
     private List<Usuarios> listaUsInactivos;
+    private List<Permisos> listPerm;
+
     private Usuarios usuarioActual;
+    private Permisos perm;  //-----------------
+
     private String password, password2;
     private Integer bandera = 0;
-    private Permisos perm;  //-----------------
-    private UsuarioPermiso usPerm;  //-----------------
-    private List<Permisos> listPerm; //-----------------
-    
-    private List<UsuarioPermiso> listUsPerm;
+    //-----------------
 
     public Permisos getPerm() {
         return perm;
     }
 /////////////{
 
-    public List<UsuarioPermiso> getListUsPerm() {
-        return listUsPerm;
-    }
-
-    public void setListUsPerm(List<UsuarioPermiso> listUsPerm) {
-        this.listUsPerm = listUsPerm;
-    }
-
-    
-    
-    public void setPerm(Permisos perm) {
-        this.perm = perm;
-    }
-
-    public List<Permisos> getListPerm() {
-        return listPerm;
-    }
-
-    public void setListPerm(List<Permisos> listPerm) {
-        this.listPerm = listPerm;
-    }
-
-    public UsuarioPermiso getUsPerm() {
-        return usPerm;
-    }
-
-    public void setUsPerm(UsuarioPermiso usPerm) {
-        this.usPerm = usPerm;
-    }
-
-    public void prueba() {
-        System.out.println(" ...Probando..." + perm.getIdpermisos());
-        
-        listUsPerm = usuarioPermisoFacade.buscarUsPerm(perm);
-        System.out.println(".....  tercero .........");
-        
-        System.out.println(".....  tercero ........."+listPerm.toString());
-        
-   //     getItemsAvailableSelectOne3();
-
-    }
-
-    ////////////}
-///////}
-    public UsuariosController() {
-    }
-
     @PostConstruct
     public void inicializar() {
         try {
-            listPerm = permisosFacade.findAll(); //------------
-            listaUsuarios = ejbFacade.listarUsuarios();
-            listaUsInactivos = ejbFacade.listarUsInactivos();
+            listPerm = permisosFacade.findAll();
+            listaUsuarios = usuariosFacade.listarUsuarios();
+            listaUsInactivos = usuariosFacade.listarUsInactivos();
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "error al iniciar", e);
         }
@@ -159,7 +106,7 @@ public class UsuariosController implements Serializable {
     }
 
     private UsuariosFacade getFacade() {
-        return ejbFacade;
+        return usuariosFacade;
     }
 
     public Usuarios prepareCreate() {
@@ -171,7 +118,7 @@ public class UsuariosController implements Serializable {
     public void create() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            Usuarios userC = ejbFacade.usuarioUnico(usuarioActual.getCedula());
+            Usuarios userC = usuariosFacade.usuarioUnico(usuarioActual.getCedula());
             if (userC != null) {
                 usuarioActual.setEstado(true);
                 usuarioActual.setCargo(true);
@@ -219,12 +166,28 @@ public class UsuariosController implements Serializable {
         }
     }
 
-//    public List<Usuarios> getListUsTotal() {
-//        if (listUsTotal == null) {
-//            listUsTotal = getFacade().findAll();
-//        }
-//        return listUsTotal;
-//    }
+    public List<Usuarios> getListUsTotal() {
+        if (listaUsuarios == null) {
+            listaUsuarios = getFacade().listarUsuarios();
+        }
+        return listaUsuarios;
+    }
+
+    public void setPerm(Permisos perm) {
+        this.perm = perm;
+    }
+
+    public List<Permisos> getListPerm() {
+        return listPerm;
+    }
+
+    public void setListPerm(List<Permisos> listPerm) {
+        this.listPerm = listPerm;
+    }
+
+    public UsuariosController() {
+    }
+
     private void persist(PersistAction persistAction, String successMessage) {
         if (usuarioActual != null) {
             setEmbeddableKeys();
@@ -274,18 +237,6 @@ public class UsuariosController implements Serializable {
         return permisosFacade.findAll();//getFacade().listarUsuarios();    //findAll();
     }
 
-//    public List<Permisos> getItemsAvailableSelectMany3() {
-//        return usuarioPermisoFacade.buscarUsPerm(usPerm);//getFacade().findAll(); //findAll();
-//    }
-//
-//    public List<Permisos> getItemsAvailableSelectOne3() {
-//        return usuarioPermisoFacade.buscarUsPerm(perm);//getFacade().listarUsuarios();    //findAll();
-//    }
-
-    ///////////} 
-    
-    
-    
     public List<Usuarios> getListaUsuarios() {
         return listaUsuarios;
     }

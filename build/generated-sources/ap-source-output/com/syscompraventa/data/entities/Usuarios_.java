@@ -12,7 +12,6 @@ public abstract class Usuarios_ {
 
 	public static volatile SingularAttribute<Usuarios, String> apellidos;
 	public static volatile SingularAttribute<Usuarios, Boolean> estado;
-	public static volatile ListAttribute<Usuarios, UsuarioPermiso> usuarioPermisoList;
 	public static volatile SingularAttribute<Usuarios, Integer> idusuarios;
 	public static volatile SingularAttribute<Usuarios, String> cedula;
 	public static volatile SingularAttribute<Usuarios, String> direccion;
@@ -20,6 +19,7 @@ public abstract class Usuarios_ {
 	public static volatile ListAttribute<Usuarios, Cliente> clienteList;
 	public static volatile ListAttribute<Usuarios, Proveedor> proveedorList;
 	public static volatile SingularAttribute<Usuarios, Empresa> idempresa;
+	public static volatile SingularAttribute<Usuarios, Permisos> idpermisos;
 	public static volatile ListAttribute<Usuarios, Producto> productoList;
 	public static volatile SingularAttribute<Usuarios, String> correo;
 	public static volatile SingularAttribute<Usuarios, Date> fechaingreso;
