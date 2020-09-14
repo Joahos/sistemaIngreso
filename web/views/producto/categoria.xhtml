@@ -86,11 +86,9 @@
                         <h:panelGroup id="display">
                             <p:panelGrid id="pnlPersona" columns="2" rendered="#{categoriaController.categoriaActual != null}">
                                 
-                                
-                                <p:commandButton value="Ver" action="#{categoriaController.enableButton()}" update="categoria"/>
                                 <p:outputLabel value="Categoria" for="categoria" />
                                 <p:inputText id="categoria" value="#{categoriaController.categoriaActual.categoria}" title="Categoria" 
-                                             disabled="#{!categoriaController.enabled}"/>
+                                             />
 
                                 <p:outputLabel value="Usuario" for="idusuarios" />
                                 <p:selectOneMenu id="idusuarios" value="#{categoriaController.categoriaActual.idusuarios}" required="true" 

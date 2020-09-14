@@ -144,9 +144,6 @@
                                 <p:outputLabel value="Precio compra: " for="preciocompra" />
                                 <p:inputText id="preciocompra" value="#{productoController.selected.preciocompra}"/>
 
-                                <p:outputLabel value="Precio venta: " for="precioventa" />
-                                <p:inputText id="precioventa" value="#{productoController.selected.precioventa}" />
- 
                                 <p:outputLabel value="Fecha caducidad: " for="fechavencimiento" />
                                 <p:calendar id="fechavencimiento" pattern="MM/dd/yyyy" value="#{productoController.selected.fechavencimiento}"  showOn="button"/>
 
@@ -235,12 +232,6 @@
 
                                 <p:outputLabel value="Precio compra: " for="preciocompra" />
                                 <p:inputText id="preciocompra" value="#{productoController.selected.preciocompra}" />
-
-                                <p:outputLabel value="Precio venta: " for="precioventa" />
-                                <p:inputText id="precioventa" value="#{productoController.selected.precioventa}"/>
-
-<!--                                <p:outputLabel value="Imagen: " for="imagen" />-->
-<!--                                <p:inputText id="imagen" value="" />-->
 
                                 <p:outputLabel value="Fecha caducidad: " for="fechavencimiento" />
                                 <p:calendar id="fechavencimiento" pattern="MM/dd/yyyy" value="#{productoController.selected.fechavencimiento}" showOn="button"/>
@@ -359,7 +350,7 @@
                                                  oncomplete="PF('widEraseProduct').hide();"/>
 
                                 <p:commandButton  icon="ui-icon-trash"
-                                                  actionListener="#{productoController.eraseLog()}" 
+                                                  actionListener="#{productoController.destroy()}" 
                                                   process="@this" value="Eliminar" 
                                                   oncomplete="PF('widEraseProduct').hide();"
                                                   update=":formListProduct:msmGrowl, :formListProduct:listaProduct"/>

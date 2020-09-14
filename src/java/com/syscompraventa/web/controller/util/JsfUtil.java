@@ -39,13 +39,14 @@ public class JsfUtil {
     public static void addErrorMessages(List<String> messages) {
         messages.forEach((message) -> {
             addErrorMessage(message);
-        });//        for (String message : messages) {
-//            addErrorMessage(message);
-//        }
+        });
+        for (String message : messages) {
+            addErrorMessage(message);
+        }
     }
 
     public static void addErrorMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La accion ejecutada esta restringida");
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 

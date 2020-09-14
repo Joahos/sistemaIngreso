@@ -12,17 +12,16 @@
 
             <ui:define name="content">
                 <h:form id="ComprasListForm">
+                    <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="6000"/>
                     <p:panel header="ADMINISTRACION DE COMPRAS">
                         <p:dataTable id="datalist" value="#{comprasController.items}" var="item"
                                      selectionMode="single" selection="#{comprasController.compraActual}"
-                                     paginator="true"
-                                     rowKey="#{item.idcompras}"
-                                     rows="10"
+                                     paginator="true" rowKey="#{item.idcompras}" rows="10"
                                      rowsPerPageTemplate="10,20,30,40,50"
                                      >
 
-                            <p:ajax event="rowSelect"   update="btnEdite btnView "/>
-                            <p:ajax event="rowUnselect" update=" btnEdite btnView "/>
+                            <p:ajax event="rowSelect"   update="btnEdite btnView btnDelete"/>
+                            <p:ajax event="rowUnselect" update=" btnEdite btnView btnDelete"/>
 
                             <p:column style="width: 10%; text-align: center;">
                                 <f:facet name="header">
@@ -70,20 +69,23 @@
 
 
                             <f:facet name="footer">
-                                <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
-                                                 disabled="#{empty comprasController.compraActual}"
-                                                 update=":ComprasViewForm" 
-                                                 oncomplete="PF('ComprasViewDialog').show()" />
-                                
+                               
+
                                 <p:commandButton id="btnEdite"   icon="ui-icon-pencil" value="Editar" title="Detalle" 
                                                  disabled="#{empty comprasController.compraActual}"
                                                  update=":ComprasEditForm" 
                                                  oncomplete="PF('ComprasEditDialog').show()" />
-
-                                <p:commandButton id="btnDelete" icon="ui-icon-trash"  value="Eliminar" title="Eliminar"
+                                
+                                <p:commandButton id="btnDelete"   icon="ui-icon-trash" value="Eliminar" title="Detalle" 
+                                                 disabled="#{empty comprasController.compraActual}"
+                                                 update=":formBorrarComp" 
+                                                 oncomplete="PF('widEraseComp').show()" />
+                                
+                                 <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
                                                  disabled="#{empty comprasController.compraActual}"
                                                  update=":ComprasViewForm" 
-                                                 oncomplete="PF('ComprasViewDialog').show()"  />
+                                                 oncomplete="PF('ComprasViewDialog').show()" />
+
                             </f:facet>
                         </p:dataTable>
                     </p:panel>
@@ -95,41 +97,60 @@
                     <h:form id="ComprasEditForm">
                         <h:panelGroup id="display">
                             <p:panelGrid columns="2" rendered="#{comprasController.compraActual != null}">
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_idcompras}" for="idcompras" />
-                                <p:inputText id="idcompras" value="#{comprasController.compraActual.idcompras}" title="#{mensajes.EditComprasTitle_idcompras}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idcompras}"/>
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_fechacompra}" for="fechacompra" />
-                                <p:calendar id="fechacompra" pattern="MM/dd/yyyy" value="#{comprasController.compraActual.fechacompra}" title="#{mensajes.EditComprasTitle_fechacompra}"  showOn="button"/>
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_numerocompra}" for="numerocompra" />
-                                <p:inputText id="numerocompra" value="#{comprasController.compraActual.numerocompra}" title="#{mensajes.EditComprasTitle_numerocompra}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_proveedor}" for="proveedor" />
-                                <p:inputText id="proveedor" value="#{comprasController.compraActual.proveedor}" title="#{mensajes.EditComprasTitle_proveedor}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_cedulaproveedor}" for="cedulaproveedor" />
-                                <p:inputText id="cedulaproveedor" value="#{comprasController.compraActual.cedulaproveedor}" title="#{mensajes.EditComprasTitle_cedulaproveedor}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_comprador}" for="comprador" />
-                                <p:inputText id="comprador" value="#{comprasController.compraActual.comprador}" title="#{mensajes.EditComprasTitle_comprador}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_moneda}" for="moneda" />
-                                <p:inputText id="moneda" value="#{comprasController.compraActual.moneda}" title="#{mensajes.EditComprasTitle_moneda}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_subtotal}" for="subtotal" />
-                                <p:inputText id="subtotal" value="#{comprasController.compraActual.subtotal}" title="#{mensajes.EditComprasTitle_subtotal}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_totaliva}" for="totaliva" />
-                                <p:inputText id="totaliva" value="#{comprasController.compraActual.totaliva}" title="#{mensajes.EditComprasTitle_totaliva}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_total}" for="total" />
-                                <p:inputText id="total" value="#{comprasController.compraActual.total}" title="#{mensajes.EditComprasTitle_total}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_tipopago}" for="tipopago" />
-                                <p:inputText id="tipopago" value="#{comprasController.compraActual.tipopago}" title="#{mensajes.EditComprasTitle_tipopago}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_estado}" for="estado" />
-                                <p:selectBooleanCheckbox id="estado" value="#{comprasController.compraActual.estado}" />
-                                <p:outputLabel value="#{mensajes.EditComprasLabel_idproveedor}" for="idproveedor" />
-                                <p:selectOneMenu id="idproveedor" value="#{comprasController.compraActual.idproveedor}" required="true" requiredMessage="#{mensajes.EditComprasRequiredMessage_idproveedor}">
+                                <p:outputLabel value="Codigo: " for="idcompras" />
+                                <p:inputText id="idcompras" value="#{comprasController.compraActual.idcompras}" readonly="true"/>
+
+                                <p:outputLabel value="Numero de compra: " for="numerocompra" />
+                                <p:inputText id="numerocompra" value="#{comprasController.compraActual.numerocompra}" readonly="true" />
+
+                                <p:outputLabel value="Proveedor" for="proveedor" />
+                                <p:inputText id="proveedor" value="#{comprasController.compraActual.proveedor}"  />
+
+                                <p:outputLabel value="Cedula Proveedor: " for="cedulaproveedor" />
+                                <p:inputText id="cedulaproveedor" value="#{comprasController.compraActual.cedulaproveedor}"  />
+
+                                <p:outputLabel value="Comprador: " for="comprador" />
+                                <p:inputText id="comprador" value="#{comprasController.compraActual.comprador}"  />
+
+                                <p:outputLabel value="Moneda: " for="moneda" />
+                                <p:inputText id="moneda" value="#{comprasController.compraActual.moneda}"  />
+
+                                <p:outputLabel value="Subtotal: " for="subtotal" />
+                                <p:inputText id="subtotal" value="#{comprasController.compraActual.subtotal}" readonly="true" />
+
+                                <p:outputLabel value="IVA" for="totaliva" />
+                                <p:inputText id="totaliva" value="#{comprasController.compraActual.totaliva}" readonly="true"/>
+
+                                <p:outputLabel value="Total: " for="total" />
+                                <p:inputText id="total" value="#{comprasController.compraActual.total}" readonly="true" />
+
+                                <p:outputLabel value="tipo de pago: " for="tipopago" />
+                                <p:selectOneMenu id="tipopago" value="#{comprasController.compraActual.tipopago}" >
+                                    <f:selectItem itemValue="Efectivo" itemLabel="Efectivo"/>
+                                    <f:selectItem itemValue="Credito" itemLabel="Credito"/>
+                                    <f:selectItem itemValue="Targeta" itemLabel="Targeta"/>
+                                </p:selectOneMenu> 
+
+                                <p:outputLabel value="Proveedor" for="idproveedor" />
+                                <p:selectOneMenu id="idproveedor" value="#{comprasController.compraActual.idproveedor}" required="true" >
                                     <f:selectItem itemLabel="#{mensajes.SelectOneMessage}"/>
                                     <f:selectItems value="#{proveedorController.itemsAvailableSelectOne}"
                                                    var="idproveedorItem"
+                                                   itemLabel="#{idproveedorItem.razonzocial}"
                                                    itemValue="#{idproveedorItem}"/>
                                 </p:selectOneMenu>
 
                             </p:panelGrid>
-                            <p:commandButton actionListener="#{comprasController.update}" value="#{mensajes.Save}" update="display,:ComprasListForm:datalist" oncomplete="handleSubmit(args, 'ComprasEditDialog');"/>
-                            <p:commandButton value="#{mensajes.Cancel}" onclick="ComprasEditDialog.hide()"/>
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" process="@this" partialSubmit="true"
+                                                 update=":ComprasListForm:msmGrowl, display,:ComprasListForm:datalist" 
+                                                 oncomplete="PF('ComprasEditDialog').hide()"
+                                                 action="#{comprasController.limpiarObj()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" actionListener="#{comprasController.update}"
+                                                 value="Guardar" update=":ComprasListForm:msmGrowl, display,:ComprasListForm:datalist" 
+                                                 oncomplete="PF('ComprasEditDialog').hide();"/>
+                            </p:fieldset>
                         </h:panelGroup>
                     </h:form>
                 </p:dialog>
@@ -138,36 +159,70 @@
                     <h:form id="ComprasViewForm">
                         <h:panelGroup id="display">
                             <p:panelGrid columns="2" rendered="#{comprasController.compraActual != null}">
-                                <h:outputText value="#{mensajes.ViewComprasLabel_idcompras}"/>
-                                <h:outputText value="#{comprasController.compraActual.idcompras}" title="#{mensajes.ViewComprasTitle_idcompras}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_fechacompra}"/>
-                                <h:outputText value="#{comprasController.compraActual.fechacompra}" title="#{mensajes.ViewComprasTitle_fechacompra}">
+                                <h:outputText value="Identificacion: "/>
+                                <h:outputText value="#{comprasController.compraActual.idcompras}" />
+                                <h:outputText value="Fecha: "/>
+                                <h:outputText value="#{comprasController.compraActual.fechacompra}" >
                                     <f:convertDateTime pattern="MM/dd/yyyy" />
                                 </h:outputText>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_numerocompra}"/>
-                                <h:outputText value="#{comprasController.compraActual.numerocompra}" title="#{mensajes.ViewComprasTitle_numerocompra}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_proveedor}"/>
-                                <h:outputText value="#{comprasController.compraActual.proveedor}" title="#{mensajes.ViewComprasTitle_proveedor}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_cedulaproveedor}"/>
-                                <h:outputText value="#{comprasController.compraActual.cedulaproveedor}" title="#{mensajes.ViewComprasTitle_cedulaproveedor}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_comprador}"/>
-                                <h:outputText value="#{comprasController.compraActual.comprador}" title="#{mensajes.ViewComprasTitle_comprador}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_moneda}"/>
-                                <h:outputText value="#{comprasController.compraActual.moneda}" title="#{mensajes.ViewComprasTitle_moneda}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_subtotal}"/>
-                                <h:outputText value="#{comprasController.compraActual.subtotal}" title="#{mensajes.ViewComprasTitle_subtotal}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_totaliva}"/>
-                                <h:outputText value="#{comprasController.compraActual.totaliva}" title="#{mensajes.ViewComprasTitle_totaliva}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_total}"/>
-                                <h:outputText value="#{comprasController.compraActual.total}" title="#{mensajes.ViewComprasTitle_total}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_tipopago}"/>
-                                <h:outputText value="#{comprasController.compraActual.tipopago}" title="#{mensajes.ViewComprasTitle_tipopago}"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_estado}"/>
-                                <p:selectBooleanCheckbox value="#{comprasController.compraActual.estado}" disabled="true"/>
-                                <h:outputText value="#{mensajes.ViewComprasLabel_idproveedor}"/>
-                                <h:outputText value="#{comprasController.compraActual.idproveedor}" title="#{mensajes.ViewComprasTitle_idproveedor}"/>
+                                <h:outputText value="Numero de compra: "/>
+                                <h:outputText value="#{comprasController.compraActual.numerocompra}"/>
+
+                                <h:outputText value="Proveedor: "/>
+                                <h:outputText value="#{comprasController.compraActual.proveedor}" />
+
+                                <h:outputText value="Cedula del proveedor: "/>
+                                <h:outputText value="#{comprasController.compraActual.cedulaproveedor}"/>
+
+                                <h:outputText value="Comprador: " />
+                                <h:outputText value="#{comprasController.compraActual.comprador}" />
+                                <h:outputText value="Moneda: "/>
+                                <h:outputText value="#{comprasController.compraActual.moneda}"/>
+
+                                <h:outputText value="Total: "/>
+                                <h:outputText value="#{comprasController.compraActual.subtotal}"/>
+
+                                <h:outputText value="IVA: "/>
+                                <h:outputText value="#{comprasController.compraActual.totaliva}" />
+
+                                <h:outputText value="Total: "/>
+                                <h:outputText value="#{comprasController.compraActual.total}" />
+
+                                <h:outputText value="Tipo de pago: "/>
+                                <h:outputText value="#{comprasController.compraActual.tipopago}" />
                             </p:panelGrid>
-                            <p:commandButton value="#{mensajes.Close}" onclick="ComprasViewDialog.hide()"/>
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" process="@this" partialSubmit="true"
+                                                 update="display,:ComprasListForm:datalist" 
+                                                 oncomplete="PF('ComprasViewDialog').hide()"
+                                                 action="#{comprasController.limpiarObj()}"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="formEraseComp" widgetVar="widEraseComp" modal="true" resizable="false" 
+                          appendTo="@(body)" header="ELIMINAR COMPRA"
+                          showEffect="explode" hideEffect="explode">
+                    <h:form id="formBorrarComp">
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="1" rendered="#{comprasController.compraActual != null}">
+                                Esta seguro de eliminar la compra numero: 
+
+                                #{comprasController.compraActual.numerocompra}
+                            </p:panelGrid>
+                            <p:fieldset style="text-align: center; padding: 0px">
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" 
+                                                 process="@this" partialSubmit="true" 
+                                                 update=":ComprasListForm:msmGrowl, :ComprasListForm:datalist"
+                                                 onclick="widEraseUser.hide()"
+                                                 action="#{comprasController.limpiarObj()}"/>
+
+                                <p:commandButton  icon="ui-icon-trash"
+                                                  actionListener="#{comprasController.destroy()}" 
+                                                  value="Eliminar" update=":ComprasListForm:msmGrowl, :ComprasListForm:datalist"
+                                                  oncomplete="PF('widEraseComp').hide();"/>
+                            </p:fieldset>
                         </h:panelGroup>
                     </h:form>
                 </p:dialog>

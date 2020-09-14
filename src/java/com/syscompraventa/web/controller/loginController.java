@@ -80,30 +80,6 @@ public class loginController implements Serializable {
 
     }
 
-//    public void autenticarUsuario() {
-//        try {
-//
-//            FacesMessage message = null;
-//            usuarioLogeado = usuariosFacade.Autenticar(usuarioCaptura);
-//
-//            if (usuarioLogeado != null) {
-//
-//                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "BIENVENIDO", usuarioLogeado.getApellidos());
-//                ec.redirect(ec.getRequestContextPath() + "/views/menuPrincipal.xhtml");
-//
-//            } else {
-//                limpiarObjeto();
-//                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Loggin Error", "Datos invalidos");
-//                FacesContext.getCurrentInstance().addMessage(null, message);
-//            }
-//
-//        } catch (Exception ex) {
-//            LOG.log(Level.SEVERE, "Error", ex);
-//        }
-//
-//    }
-    ////////
     public String autenticarUsuario() {
 
         try {

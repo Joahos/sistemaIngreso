@@ -5,6 +5,7 @@ import com.syscompraventa.web.controller.util.JsfUtil;
 import com.syscompraventa.web.controller.util.JsfUtil.PersistAction;
 import com.syscompraventa.business.facade.ProductoFacade;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ public class ProductoController implements Serializable {
     @EJB
     private com.syscompraventa.business.facade.ProductoFacade ejbFacade;
     private static final Logger LOG = Logger.getLogger(ProductoController.class.getName());
+    DecimalFormat des = new DecimalFormat("#0.00");
 
     private List<Producto> items = null;
     private List<Producto> listarProducto;
@@ -103,46 +105,52 @@ public class ProductoController implements Serializable {
     }
 
     public void create() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        selected.setProducto(nombreProd);
         int nuevStock;
         Float totalt;
-        selected.setProducto(nombreProd);
+//
+//        try {
+//            prod = ejbFacade.obtenerProductoS(nombreProd);
+//            if (nombreProd.equals(prod.getProducto()) || prod ==null) {
+//
+//                nuevStock = prod.getStock() + selected.getStock();
+//
+//                totalt = ((prod.getStock() * Float.valueOf(prod.getPrecioventa())) + (selected.getStock() * Float.valueOf(selected.getPreciocompra()))) / nuevStock;
+//
+//                selected.setProducto(nombreProd);
+//                selected.setStock(nuevStock);
+//                selected.setPrecioventa(des.format(totalt));
+//                System.out.println("Enviando actualizar");
+//                ejbFacade.actualizarStock(selected);
+//
+//                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Producto actualizado correctamente"));
+//                nombreProd = null;
+//
+//            } else {
 
-        try {
-            prod = ejbFacade.obtenerProducto(selected);
-
-            System.out.println("..................." + prod);
-
-            if (prod.equals(ejbFacade.obtenerProducto(selected))) {
-
-                nuevStock = prod.getStock() + selected.getStock();
-
-                totalt = ((prod.getStock() * Float.valueOf(prod.getPrecioventa())) + (selected.getStock() * Float.valueOf(selected.getPreciocompra()))) / nuevStock;
-
-                selected.setProducto(nombreProd);
-                selected.setStock(nuevStock);
-                selected.setPrecioventa(String.valueOf(totalt));
-                ejbFacade.actualizarStock(selected);
-
-            } else {
                 selected.setEstado(true);
                 persist(PersistAction.CREATE, ResourceBundle.getBundle("/mensajes").getString("ProductoCreated"));
-                System.out.println("Que haces aqui.............");
-            }
-
-        } catch (Exception e) {
-
-        }
+//            }
+//
+//        } catch (Exception e) {
+//
+//        }
         listarProducto = ejbFacade.listarProductos();
         limpiarObjeto();
 
     }
 
     public void update() {
+
         try {
-            persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("ProductoUpdated"));
+            FacesContext context = FacesContext.getCurrentInstance();
+            ejbFacade.actualizarProducto(selected);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Producto actualizado correctamente"));
         } catch (Exception ex) {
             Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         listarProducto = ejbFacade.listarProductos();
     }
 
@@ -161,13 +169,12 @@ public class ProductoController implements Serializable {
 
     public List<Producto> getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getFacade().listarProductos();
         }
         return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
-        FacesContext context = FacesContext.getCurrentInstance();
         if (selected != null) {
             setEmbeddableKeys();
             try {
@@ -181,33 +188,16 @@ public class ProductoController implements Serializable {
                 String msg = "";
                 Throwable cause = ex.getCause();
                 if (cause != null) {
-                    //   msg = cause.getLocalizedMessage();
-
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Duplicado", "El producto ya existe debe actualizar"));
+                    msg = cause.getLocalizedMessage();
                 }
                 if (msg.length() > 0) {
-                    //  JsfUtil.addErrorMessage(msg);
-
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Duplicado", "El producto ya existe debe actualizar"));
-
-                } //else {
-//                 //   JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/mensajes").getString("PersistenceErrorOccured"));
-//                    System.out.println("clave duplicada n1...............");
-//                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Duplicado", "El producto ya existe debe actualizar"));
-//                }
-//            } catch (Exception ex) {
-
-//            System.out.println("Mensaje 1" + e.getMessage());
-//            System.out.println("Clase 1" + e.getClass().getName());
-//
-//            System.out.println("Mensaje 2 " + e.getCause().getMessage());
-//            System.out.println("Clase 2 " + e.getCause().getClass().getName());
-//
-//            System.out.println("Mensaje 3 " + e.getCause().getCause().getMessage());
-//            System.out.println("Clase 3 " + e.getCause().getCause().getClass().getName());
-//             //   Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-//              //  JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/mensajes").getString("PersistenceErrorOccured"));
-//                System.out.println("Clave Duplicada...................");
+                    JsfUtil.addErrorMessage(msg);
+                } else {
+                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/mensajes").getString("PersistenceErrorOccured"));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/mensajes").getString("PersistenceErrorOccured"));
             }
         }
     }

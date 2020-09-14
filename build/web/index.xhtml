@@ -5,11 +5,16 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <f:view contentType="text/html">
+
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>Compras-Ventas</title>
                 <h:outputStylesheet name="/css/personalizado.css"/>
+
+                <link rel="shortcut icon" href="resources/img/logo.png" type="resources/image/x-icon"/>
+                <link rel="stylesheet" href="resources/css/estLogin.css" />
+                <p:link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800;display=swap" rel="stylesheet" />
             </f:facet>
         </h:head>
 
@@ -20,25 +25,29 @@
                 <p:layoutUnit style="font-size: 25px"  position="north" resizable="true" closable="true" collapsible="true" class="NortSout">
                     COMPRAS - VENTAS
                 </p:layoutUnit>
-
-                <p:layoutUnit style="font-size: 13px" position="south"  closable="true" collapsible="true" class="NortSout">
-                    &copy; 2019 MAKROTECH COMPUTERS
-                    <br/>
-                    Estamos ubicado en: Provincia Bolivar, Canton Guaranda, Calles Candido Rada y Joaquin Galarza
-                    <br/>
-                    Propietario: Gabriel 0999295799, 
-                    Telefonos: 0000000
-                    <br/>
-                    Elaborado por: William Chimborazo, Telefono: 0958978837
-                </p:layoutUnit>
-
                 <p:layoutUnit position="center">
-                    <h:form>
-                        <div class="ui-fluid">
-                            <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
-                            <h:panelGrid width="100%" columns="3" columnClasses="ui-g-12 ui-md-5, ui-g-12 ui-md-3, ui-g-12 ui-md-4" cellpadding="5">
-                                <p:outputLabel value=""/>
-                                <p:panel header="COMPRA-VENTAS">
+                    <h:form id="es"> 
+                        <p:growl id="growl" sticky="true" showDetail="true" life="1000" />
+                        <p:menubar>
+                            <f:facet name="options">
+                                <nav>
+                                    <p:commandLink value="Ingresar" oncomplete="PF('wConsultaFech').show()"
+                                                   update=":formConsultaFecha" 
+                                                   actionListener="#{loginController.limpiarObjeto()}"/> &nbsp;
+                                    <a href="#productos">Productos</a>
+                                    <a href="#galeria">Galeria</a>
+                                    <a href="#servicio">Servicios</a>
+                                    <a href="#informacion">Contacto</a>
+                                </nav>
+                            </f:facet>
+                        </p:menubar>
+                    </h:form>
+                    <p:dialog id="consultaFecha" widgetVar="wConsultaFech" modal="true" resizable="false" appendTo="@(body)" header="CONSULTAR PORFECHA"  showEffect="explode" 
+                              hideEffect="bounce">
+                        <h:form id="formConsultaFecha" >
+                            <h:panelGrid width="100%" columns="3" >
+
+                                <p:panel >
                                     <h:panelGrid columns="2" >
                                         <p:outputLabel value="Usuario: " for="user" />
                                         <p:inputText id="user" value="#{loginController.username}" placeholder="Usuario" required="true" label="Usuario"
@@ -46,11 +55,10 @@
                                         <p:outputLabel value="Contraseña" for="passwd" />
                                         <p:password id="passwd" value="#{loginController.contrasenia}" placeholder="Password" required="true" label="password"
                                                     requiredMessage="Escriba el password"/>
-
-                                        <f:facet name="footer">
-                                            <p:commandButton icon="ui-icon-key" value="Ingresar" update="growl,user,passwd" action="#{loginController.autenticarUsuario()}"
+                                        <f:facet name="footer" >
+                                            <p:commandButton icon="ui-icon-key" value="Ingresar" update=":es:growl,user,passwd,:es,:formConsultaFecha" action="#{loginController.autenticarUsuario()}"
                                                              process="@this,user,passwd"
-                                                             oncomplete="handleLoginRequest(xhr, status, args)" />
+                                                             oncomplete="PF('wConsultaFech').hide()" />
                                         </f:facet> 
                                     </h:panelGrid>
                                     <p:separator />
@@ -59,8 +67,192 @@
                                     <h:link value="Olvidé mi contraseña! " outcome="/views/producto/categoria" />
                                 </p:panel>
                             </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <header>
+                        <section class="textos-header">
+                            <h1>Makrotech computers</h1>
+                            <h2>Te ofrece lo mejor en tecnologia e instalacion de internet</h2>
+                        </section>
+                        <div class="wave" style="height: 150px; overflow: hidden;">
+                            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+                                <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
+                                      style="stroke: none; fill: #fff;">
+
+                                </path>
+                            </svg>
                         </div>
-                    </h:form>
+                    </header>
+
+                    <section class="contenedor sobre-nosotros" id="productos">
+
+                        <h2 class="titulo">Nuestro producto</h2>
+                        <div class="contenedor-sobre-nosotros">
+                            <img src="resources/img/ilustracion2.svg" alt="" class="imagen-about-us">
+                                <div class="contenido-textos">
+                                    <h3><span>1</span>Equipos de redes</h3>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt veniam eius aspernatur ad consequuntur aperiam minima sed dicta odit numquam sapiente quam eum, architecto animi pariatur, velit doloribus laboriosam ut.</p>
+                                    <h3><span>2</span>Equipos informaticos</h3>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt veniam eius aspernatur ad consequuntur aperiam minima sed dicta odit numquam sapiente quam eum, architecto animi pariatur, velit doloribus laboriosam ut.</p>
+                                    <h3><span>3</span>Varios</h3>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt veniam eius aspernatur ad consequuntur aperiam minima sed dicta odit numquam sapiente quam eum, architecto animi pariatur, velit doloribus laboriosam ut.</p>
+
+                                </div>
+                            </img>
+                        </div>
+                    </section>
+
+
+                    <section class="portafolio" id="galeria">
+                        <div class="contenedor">
+                            <h2 class="titulo">Galeria</h2>
+                            <div class="galeria-port">
+                                <div class="imagen-port">
+                                    <img src="resources/img/img1.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img2.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img3.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img1.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img4.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img5.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img6.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                                <div class="imagen-port">
+                                    <img src="resources/img/img7.jpg" alt="">
+                                        <div class="hover-galeria">
+                                            <img src="resources/img/icono1.png" alt="">
+                                                <p>Intalacion en ?????????</p>
+                                            </img>
+                                        </div>
+                                    </img>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="about-services">
+                        <div class="contenedor" id="servicio">
+                            <h2 class="titulo">Nuestros servicios</h2>
+                            <div class="servicio-cont">
+                                <div class="servicio-ind">
+                                    <img src="resources/img/ilustracion1.svg" alt="">
+                                        <h3>Instalacion de puntos de internet</h3>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
+                                    </img>
+                                </div>
+                                <div class="servicio-ind">
+                                    <img src="resources/img/ilustracion4.svg" alt="">
+                                        <h3>Asistencia tecnica</h3>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
+                                    </img>
+                                </div>
+                                <div class="servicio-ind">
+                                    <img src="resources/img/ilustracion3.svg" alt="">
+                                        <h3>Servicio tecnico</h3>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, qui?</p>
+                                    </img>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="clientes contenedor" id="opinion">
+                        <h2 class="titulo">Opinion de nuestros clientes</h2>
+                        <div class="cards">
+                            <div class="card">
+                                <img src="resources/img/face1.jpg" alt="">
+                                    <div class="contenido-texto-card">
+                                        <h4>Name</h4>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sapiente!</p>
+                                    </div>
+                                </img>
+                            </div>
+                            <div class="card">
+                                <img src="resources/img/face2.jpg" alt="">
+                                    <div class="contenido-texto-card">
+                                        <h4>Name</h4>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sapiente!</p>
+                                    </div>
+                                </img>
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer >
+                        <div class="contenedor-footer" id="informacion">
+                            <div class="content-foo">
+                                <h4>Telefono</h4>
+                                <p>0999295799</p>
+                            </div>
+                            <div class="content-foo">
+                                <h4>Propietario</h4>
+                                <p>Gabriel</p>
+                                <h4>Email</h4>
+                                <p>juan@gmail.com</p>
+                            </div>
+                            <div class="content-foo">
+                                <h4>Ubicacion</h4>
+                                <p> Provincia Bolivar, Canton Guaranda, Calles Candido Rada y Joaquin Galarza</p>
+                            </div>
+
+                        </div>
+                        <h2 class="titulo-final">&copy; 2020 MAKROTECH COMPUTERS</h2>
+                        <h2 class="titulo-final" style="font-size: 10px;">William Chimborazo, Telefono: 0958978837</h2>
+
+                    </footer>
+
                 </p:layoutUnit>
 
             </p:layout>
@@ -68,7 +260,5 @@
         </h:body>
 
     </f:view>
-
-
 </html>
 

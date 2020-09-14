@@ -159,22 +159,7 @@
                                                    itemValue="#{idPerm}"
                                                  />    
                                 </p:selectOneMenu>
-                                
-                                
-                                
-                                
-                                <p:outputLabel value="Usuario Permisos" for="idUsPerm" />
-                                <p:selectOneMenu id="idUsPerm" value="#{usuariosController.perm}" required="true" >
-                                    <f:selectItems value="#{usuariosController.listPerm}"
-                                                   var="usPermi"
-                                                   itemLabel="#{usPermi.nombre}"
-                                                   itemValue="#{usPermi}"/>
-                                </p:selectOneMenu>
-                                
-                                
-
-
-                                
+                               
                             </p:panelGrid>
 
                             <p:fieldset style="text-align: center; padding: 0px"> 
@@ -225,14 +210,6 @@
 
                                 <p:outputLabel value="Fecha de ingreso" for="fechaingreso" />
                                 <p:calendar id="fechaingreso" pattern="MM/dd/yyyy" value="#{usuariosController.usuarioActual.fechaingreso}" title="Fecha de Ingreso"  showOn="button"/>
-
-                                <p:outputLabel value="Empresa" for="idempresa" />
-                                <p:selectOneMenu id="idempresa" value="#{usuariosController.usuarioActual.idempresa}" required="true" >
-                                    <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"
-                                                   var="idempresaItem"
-                                                   itemLabel="#{idempresaItem.nombreempresa}"
-                                                   itemValue="#{idempresaItem}"/>
-                                </p:selectOneMenu>
                                 
                             </p:panelGrid>
 
@@ -240,7 +217,7 @@
                                 <p:commandButton icon=" ui-icon-close" value="Cancelar"
                                                  process="@this" partialSubmit="true"
                                                  update=":formListUser:msmGrowl, :formListUser:nominaUser"
-                                                 onclick="widEditUser.hide()"
+                                                 onclick="PF('widEditUser').hide()"
                                                  action="#{usuariosController.limpiarObjeto()}"/>
                                 
                                 <p:commandButton icon="ui-icon-disk" actionListener="#{usuariosController.update}" 
@@ -275,7 +252,7 @@
                                 <h:outputText value="#{usuariosController.usuarioActual.direccion}"/>
 
                                 <h:outputText value="Cargo"/>
-                                <p:selectBooleanCheckbox value="#{usuariosController.usuarioActual.cargo}" disabled="true"/>
+                                <p:selectBooleanCheckbox value="#{usuariosController.usuarioActual.idpermisos.nombre}" disabled="true"/>
 
                                 <h:outputText value="Usuario"/>
                                 <h:outputText value="#{usuariosController.usuarioActual.usuario}" />

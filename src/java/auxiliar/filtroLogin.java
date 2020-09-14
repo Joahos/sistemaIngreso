@@ -24,7 +24,7 @@ public class filtroLogin implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             auUser = (Usuarios) context.getExternalContext().getSessionMap().get("usFiltro");
             if (auUser == null) {
-                context.getExternalContext().redirect("index.xhtml");
+                context.getExternalContext().redirect("./../../index.xhtml");
             }
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error", ex);

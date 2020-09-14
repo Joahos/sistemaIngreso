@@ -1,6 +1,7 @@
 package com.syscompraventa.business.facade;
 
 import com.syscompraventa.data.entities.DetalleVenta;
+import com.syscompraventa.data.entities.Ventas;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,7 +20,7 @@ public class DetalleVentaFacade extends AbstractFacade<DetalleVenta> {
     }
 
     public DetalleVentaFacade() {
-        super(DetalleVenta.class);
+        super(DetalleVenta.class); 
     }
 
     public boolean guardarVentaDetalleCompra(DetalleVenta detallefactura) throws Exception {
@@ -28,10 +29,17 @@ public class DetalleVentaFacade extends AbstractFacade<DetalleVenta> {
     }
     
     public List<DetalleVenta> listarCompraXID(Integer idCompr) throws Exception{
-        String jpql = "SELECT d FROM DetalleCompra d WHERE d.idcompras.idcompras = :idComp";
+        String jpql = "SELECT d FROM DetalleVenta d WHERE d.idventas.idventas = :idComp";
         Query q = em.createQuery(jpql);
         q.setParameter("idComp", idCompr);
         return q.getResultList();
+    }
+    
+        public void borradoLogXVenta(Ventas idProduct) throws Exception {
+        String jpql = "update DetalleVenta d set d.estado=false where d.idventas=:p1";
+        Query q = em.createQuery(jpql);
+        q.setParameter("p1", idProduct);
+        q.executeUpdate();
     }
 
 }

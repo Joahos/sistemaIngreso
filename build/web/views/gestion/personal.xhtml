@@ -20,10 +20,8 @@
 
                                 <p:dataTable  id="nominaUser" value="#{usuariosController.listaUsInactivos}" var="item"
                                               selectionMode="single" selection="#{usuariosController.usuarioActual}"
-                                              paginator="true"
-                                              rowKey="#{item.idusuarios}"
-                                              rows="10"
-                                              rowsPerPageTemplate="10,20,30"
+                                              paginator="true" rowKey="#{item.idusuarios}"  rows="10"
+                                              rowsPerPageTemplate="10,20,30" emptyMessage="No existe datos para mostrar"
                                               >
 
                                     <p:column style="width: 20%">
@@ -44,8 +42,9 @@
                                             <h:outputText value="Activar"/>
                                         </f:facet>
                                         <p:selectBooleanCheckbox id="estado" value="#{item.estado}" >
-                                            <p:ajax listener="#{usuariosController.activarUser(item)}" update=":formListUser:msmGrowl, :formListUser:nominaUser" 
-                                                    process="@this" partialSubmit="true"/>
+                                            <p:ajax listener="#{usuariosController.activarUser(item)}" 
+                                                    process="@this" partialSubmit="true"
+                                                    update=":formListUser:msmGrowl, :formListUser:nominaUser" />
                                         </p:selectBooleanCheckbox>
                                     </p:column>
                                 </p:dataTable>
@@ -59,11 +58,9 @@
                             <p:panel header="Clientes inactivos" >
                                
                                 <p:dataTable  id="listaCliente" value="#{clienteController.listaCliInactivos}" var="item"
-                                              selectionMode="single" selection="#{productoController.selected}"
-                                              paginator="true"
-                                              rowKey="#{item.idcliente}"
-                                              rows="10"
-                                              rowsPerPageTemplate="10,20,30"
+                                              selectionMode="single" selection="#{clienteController.selected}"
+                                              paginator="true"  rowKey="#{item.idcliente}"  rows="10"
+                                              rowsPerPageTemplate="10,20,30" emptyMessage="No existe datos para mostrar"
                                               >
 
                                     <p:column style="width: 20%">
@@ -86,7 +83,7 @@
                                         </f:facet>
                                         <p:selectBooleanCheckbox id="estado" value="#{item.estado}" >
                                             <p:ajax listener="#{clienteController.activarCliente(item)}" 
-                                                    update=":formListCliente:msmGrowl, :formListCliente:listaCliente" 
+                                                    update=":formListCliente:msmGrowl, :formListCliente:listaCliente, :formListCliente" 
                                                     process="@this" partialSubmit="true"/>
                                         </p:selectBooleanCheckbox>
                                     </p:column>

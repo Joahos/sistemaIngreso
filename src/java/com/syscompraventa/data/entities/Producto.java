@@ -60,10 +60,10 @@ public class Producto implements Serializable {
     @Column(name = "stock")
     private Integer stock;
     @Column(name = "estado")
-    private Boolean estado;
-    @Lob
-    @Column(name = "imagen")
-    private byte[] imagen;
+    private Boolean estado = true;
+//    @Lob
+//    @Column(name = "imagen")
+//    private byte[] imagen;
     @Column(name = "fechavencimiento")
     @Temporal(TemporalType.DATE)
     private Date fechavencimiento;
@@ -147,13 +147,13 @@ public class Producto implements Serializable {
         this.estado = estado;
     }
 
-    public byte[] getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(byte[] imagen) {
-        this.imagen = imagen;
-    }
+//    public byte[] getImagen() {
+//        return imagen;
+//    }
+//
+//    public void setImagen(byte[] imagen) {
+//        this.imagen = imagen;
+//    }
 
     public Date getFechavencimiento() {
         return fechavencimiento;

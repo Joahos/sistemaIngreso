@@ -15,14 +15,12 @@
                 <h:form id="formListClient">
                     <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="2000"/>
 
-                    <p:panel header="Nomina de clientes" >
+                    <p:panel header="Nomina de clientes" id="panCliente">
                         <!--                        <p:panelGrid id="pnlMostrarPersona" columns="3" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" >-->
 
                         <p:dataTable  id="nominaClient" value="#{clienteController.listaClientes}" var="item"
                                       selectionMode="single" selection="#{clienteController.selected}"
-                                      paginator="true"
-                                      rowKey="#{item.idcliente}"
-                                      rows="15"
+                                      paginator="true" rowKey="#{item.idcliente}" rows="15"
                                       rowsPerPageTemplate="10,20,30"
                                       >
 
@@ -255,8 +253,8 @@
 
                                 <p:commandButton  icon="ui-icon-trash"
                                                   actionListener="#{clienteController.eraseLog()}" 
-                                                  value="Eliminar" update=":formListClient:msmGrowl, :formListClient:nominaClient"
-                                                  oncomplete="PF('widEraseClient').hide();"/>
+                                                  value="Eliminar"  oncomplete="PF('widEraseClient').hide();"
+                                                  update=":formListClient:msmGrowl, :formListClient:nominaClient, :formListClient:panCliente ,:formListClient" />
                             </p:fieldset>
                         </h:panelGroup>
                     </h:form>

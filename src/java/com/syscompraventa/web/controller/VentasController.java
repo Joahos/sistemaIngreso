@@ -59,7 +59,7 @@ public class VentasController implements Serializable {
     private List<Cliente> listCliente;
 
     private boolean enabled;
-    private Ventas selected, ventaNumero, ventaActual;
+    private Ventas ventaNumero, ventaActual;
     private Producto productoActual, prodSelec;
     private Cliente clienteActual;
     private Empresa empresaActual;
@@ -78,12 +78,12 @@ public class VentasController implements Serializable {
     public void inicializar() {
 
         try {
+            items = ventasFacade.listarVentasActivas();
             totalVenta = new Float(0);
             numeroVenta = 0;
             ventaNumero = new Ventas();
-            ventaActual = new Ventas();
             cantProducto = null;
-            selected = new Ventas();
+            ventaActual = new Ventas();
             listDetVenta = new ArrayList<>();
             listVentas = new ArrayList<>();
             productoActual = new Producto();
@@ -129,11 +129,8 @@ public class VentasController implements Serializable {
     }
 
     public void addDatosCliente(Cliente addClient) {
-        System.out.println("empieza ..........");
         clienteActual = clienteFacade.obtenerCliente(addClient);
-        System.out.println("............................mmmm...........................");
         ventaActual.setIdcliente(clienteActual);
-        System.out.println("regresando.................." + ventaActual.getIdcliente().getIdcliente());
     }
 
     public String getFechaSistema() {
@@ -154,13 +151,11 @@ public class VentasController implements Serializable {
 
     public void agregarDatosProducto() {
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println("Verificando si es string .............." + des.format(Float.valueOf(prodSelec.getPrecioventa()) * Float.valueOf(String.valueOf(cantProducto))));
 
         try {
             if (this.cantProducto == 0 || this.cantProducto == null) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Producto no agregado"));
             } else {
-                System.out.println("viendo ..........." + prodSelec.getProducto());
                 productoActual = productoFacad.obtenerProducto(prodSelec);
 
                 Float descuentoL = (Float.valueOf(productoActual.getPrecioventa()) * cantProducto) - ((Float.valueOf(productoActual.getPrecioventa()) * cantProducto) * Float.valueOf("0.01"));
@@ -252,7 +247,6 @@ public class VentasController implements Serializable {
     }
 
     public void guardarVentas() {
-        System.out.println("....regresando.................." + ventaActual.getIdcliente().getIdcliente());
         FacesContext context = FacesContext.getCurrentInstance();
         try {
 
@@ -267,11 +261,7 @@ public class VentasController implements Serializable {
             ventaActual.setTotaliva(IVAIMP);
             ventaActual.setDescuento(desceuntoIMP);
             ventaActual.setTotal(totalFacturaIMP);
-       //     ventaActual.setIdempresa(empresaActual);
-
-            System.out.println(".................aa...................");
-            ventasFacade.guardarVentas(ventaActual);
-          //  persist(PersistAction.CREATE, ResourceBundle.getBundle("/mensajes").getString("VentasCreated"));
+            persist(PersistAction.CREATE, ResourceBundle.getBundle("/mensajes").getString("VentasCreated"));
             ventaActual = ventasFacade.obtenerUltimoRegistro();
 
             for (DetalleVenta item : listDetVenta) {
@@ -292,7 +282,6 @@ public class VentasController implements Serializable {
         enabled = false;
     }
 
-    //{
     public void obtenerProductos() {
         try {
             listDetVenta = detalleVentaFacade.listarCompraXID(ventaActual.getIdventas());
@@ -310,8 +299,22 @@ public class VentasController implements Serializable {
         listVentas = ventasFacade.listarProductosXMes(mes);
 
     }
-    //}
 
+    //{
+    public void eraseLog() {
+        try {
+            ventaActual.setEstado(false);
+            detalleVentaFacade.borradoLogXVenta(ventaActual);
+            persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("CompraErased"));
+            limpiarObj();
+            inicializar();
+        } catch (Exception ex) {
+            Logger.getLogger(ComprasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    //}
     public boolean isEnabled() {
         return enabled;
     }
@@ -436,14 +439,13 @@ public class VentasController implements Serializable {
         this.listCliente = listCliente;
     }
 
-    
     /////////////////}
     public Ventas getSelected() {
-        return selected;
+        return ventaActual;
     }
 
-    public void setSelected(Ventas selected) {
-        this.selected = selected;
+    public void setSelected(Ventas ventaActual) {
+        this.ventaActual = ventaActual;
     }
 
     protected void setEmbeddableKeys() {
@@ -457,9 +459,9 @@ public class VentasController implements Serializable {
     }
 
     public Ventas prepareCreate() {
-        selected = new Ventas();
+        ventaActual = new Ventas();
         initializeEmbeddableKey();
-        return selected;
+        return ventaActual;
     }
 
     public void create() {
@@ -476,7 +478,7 @@ public class VentasController implements Serializable {
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/mensajes").getString("VentasDeleted"));
         if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
+            ventaActual = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
@@ -490,13 +492,13 @@ public class VentasController implements Serializable {
 
     private void persist(PersistAction persistAction, String successMessage) {
         FacesContext context = FacesContext.getCurrentInstance();
-        if (selected != null) {
+        if (ventaActual != null) {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    getFacade().edit(ventaActual);
                 } else {
-                    getFacade().remove(selected);
+                    getFacade().remove(ventaActual);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {

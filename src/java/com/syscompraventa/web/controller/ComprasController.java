@@ -13,7 +13,7 @@ import com.syscompraventa.data.entities.Producto;
 import com.syscompraventa.data.entities.Proveedor;
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -49,7 +49,7 @@ public class ComprasController implements Serializable {
     //  FacesContext context = FacesContext.getCurrentInstance();
     DecimalFormat des = new DecimalFormat("#0.00");
 
-    private List<Compras> items = null;
+    private List<Compras> items;
     private List<Compras> listCompras;
     private List<DetalleCompra> listDetCompra;
     private Compras compraActual, compraNumero;
@@ -81,6 +81,7 @@ public class ComprasController implements Serializable {
     public void inicializar() {
 
         try {
+            items = comprasFacade.listarComprasActivas();
             cantProducto = null;
             compraActual = new Compras();
             proveedorActual = new Proveedor();
@@ -153,19 +154,33 @@ public class ComprasController implements Serializable {
         prodSelec = idProveed;
     }
 
+//    public void agregarDatosProducto() {
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        try {
+//            if (this.cantProducto == 0 || this.cantProducto == null) {
+//                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Producto no agregado"));
+//            } else {
+//                productoActual = productoFacad.obtenerProducto(prodSelec);////////////
+//                this.listDetCompra.add(new DetalleCompra(null, productoActual.getProducto(), productoActual.getPresentacion(), productoActual.getUnidad(), cantProducto,
+//                        productoActual.getPrecioventa(), des.format(Float.valueOf(prodSelec.getPrecioventa()) * Float.valueOf(String.valueOf(cantProducto))), null, productoActual));
+//
+//                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Producto agregado correctamente"));
+//                cantProducto = null;
+//                calcularTotalFactura();
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//    }
     public void agregarDatosProducto() {
         FacesContext context = FacesContext.getCurrentInstance();
-        System.out.println("Verificando si es string .............." + des.format(Float.valueOf(prodSelec.getPrecioventa()) * Float.valueOf(String.valueOf(cantProducto))));
 
         try {
             if (this.cantProducto == 0 || this.cantProducto == null) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Producto no agregado"));
             } else {
-                System.out.println("viendo ..........." + prodSelec.getProducto());
                 productoActual = productoFacad.obtenerProducto(prodSelec);////////////
-             //   this.listDetCompra.add(new DetalleCompra(null, productoActual.getProducto(),  productoActual.getPresentacion(), productoActual.getUnidad(), cantProducto, true, totalCompraIMP, mes, compraActual, prodSelec));
-                
-                
                 this.listDetCompra.add(new DetalleCompra(null, productoActual.getProducto(), productoActual.getPresentacion(), productoActual.getUnidad(), cantProducto,
                         productoActual.getPrecioventa(), des.format(Float.valueOf(prodSelec.getPrecioventa()) * Float.valueOf(String.valueOf(cantProducto))), null, productoActual));
 
@@ -267,7 +282,6 @@ public class ComprasController implements Serializable {
             compraActual.setComprador(empresaActual.getNombreempresa());
             compraActual.setIdempresa(empresaActual);//-
             compraActual.setMoneda("Dolar");
-            //     compraActual.setIdusuarios(usuariosFacade.find(userLogeado.getIdusuarios()));//-
             compraActual.setSubtotal(totalCompraIMP);
             compraActual.setTotaliva(IVAIMP);
             compraActual.setDescuento(desceuntoIMP);
@@ -299,7 +313,6 @@ public class ComprasController implements Serializable {
         enabled = false;
     }
 
-    //{
     public void obtenerProductos() {
         try {
             listDetCompra = detalleCompraFacad.listarCompraXID(compraActual.getIdcompras());
@@ -317,8 +330,22 @@ public class ComprasController implements Serializable {
         listCompras = comprasFacade.listarProductosXMes(mes);
 
     }
-    //}
+    //{
+//
+//    public void eraseLog() {
+//        try {
+//            compraActual.setEstado(false);
+//            detalleCompraFacad.borradoLogXCompra(compraActual);
+//            persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("CompraErased"));
+//            limpiarObj();
+//            inicializar();
+//        } catch (Exception ex) {
+//            Logger.getLogger(ComprasController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
 
+    //}
     public String getMes() {
         return mes;
     }
@@ -458,6 +485,7 @@ public class ComprasController implements Serializable {
     }
 
     public void update() {
+        compraActual.setFechacompra(new Date());
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("ComprasUpdated"));
     }
 
