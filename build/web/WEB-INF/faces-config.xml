@@ -9,4 +9,27 @@
             <var>mensajes</var>
         </resource-bundle>
     </application>
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>bodeguero</from-outcome>
+            <to-view-id>/views/menuBodeguero.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>secretario</from-outcome>
+            <to-view-id>/views/menuSecretario.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>admin</from-outcome>
+            <to-view-id>/views/menuPrincipal.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>cliente</from-outcome>
+            <to-view-id>/views/menuCliente.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>tecnico</from-outcome>
+            <to-view-id>/views/menuTecnico.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

@@ -30,6 +30,7 @@ public class loginController implements Serializable {
     @PostConstruct
     public void inicializar() {
         try {
+            usActualizando = new Usuarios();
             username = new String();
             contrasenia = new String();
             usuarioLogeado = new Usuarios();
@@ -80,20 +81,52 @@ public class loginController implements Serializable {
 
     }
 
+//    public String autenticarUsuario() {
+//
+//        try {
+//           // FacesMessage message = null;
+//            usuarioLogeado = usuariosFacade.Autenticar(username, validations.sha512(contrasenia));
+//            
+//            System.out.println("Usuario en usos "+usuarioLogeado.getApellidos());
+//
+//            if (usuarioLogeado != null) {
+//
+//                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usFiltro", usuarioLogeado);
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Bienvenido: "+usuarioLogeado.getApellidos()));
+//                usActualizando = usuarioLogeado;
+//                redireccion = "/views/menuPrincipal?faces-redirect=true";
+//            } else {
+//                limpiarObjeto();
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales incorrectos"));
+//            }
+//
+//        } catch (Exception ex) {
+//            LOG.log(Level.SEVERE, "Error", ex);
+//        }
+//        return redireccion;
+//
+//    }
+    
     public String autenticarUsuario() {
 
         try {
-           // FacesMessage message = null;
+            // FacesMessage message = null;
             usuarioLogeado = usuariosFacade.Autenticar(username, validations.sha512(contrasenia));
-            
-            System.out.println("Usuario en usos "+usuarioLogeado.getApellidos());
 
             if (usuarioLogeado != null) {
-
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usFiltro", usuarioLogeado);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Bienvenido: "+usuarioLogeado.getApellidos()));
-                usActualizando = usuarioLogeado;
-                redireccion = "/views/menuPrincipal?faces-redirect=true";
+                if (usuarioLogeado.getIdpermisos().getNombre().equalsIgnoreCase("Administrador")) {
+                    redireccion = "/views/menuPrincipal?faces-redirect=true";
+                } else if (usuarioLogeado.getIdpermisos().getNombre().equalsIgnoreCase("Secretario")) {
+                    redireccion = "/views/menuSecretario?faces-redirect=true";
+                } else if (usuarioLogeado.getIdpermisos().getNombre().equalsIgnoreCase("Tecnico")) {
+                    redireccion = "/views/menuTecnico?faces-redirect=true";
+                } else if (usuarioLogeado.getIdpermisos().getNombre().equalsIgnoreCase("Bodeguero")) {
+                    redireccion = "/views/menuBodeguero?faces-redirect=true";
+                } else if (usuarioLogeado.getIdpermisos().getNombre().equalsIgnoreCase("Cliente")) {
+                    redireccion = "/views/menuCliente?faces-redirect=true";
+                }
+
             } else {
                 limpiarObjeto();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales incorrectos"));
@@ -105,6 +138,8 @@ public class loginController implements Serializable {
         return redireccion;
 
     }
+    
+    
 
     public String cerrarSesion() {
         limpiarObjeto();
@@ -148,7 +183,7 @@ public class loginController implements Serializable {
     }
 
     public void setUsuarioLogeado(Usuarios usuarioLogeado) {
-        
+
         this.usuarioLogeado = usuarioLogeado;
     }
 

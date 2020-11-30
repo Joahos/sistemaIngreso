@@ -1,0 +1,368 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="formListProduct">
+                    <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="2000"/>
+
+                    <p:panel header="Lista de productos" >
+                        <!--                        <p:panelGrid id="pnlMostrarPersona" columns="3" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" >-->
+
+                        <p:dataTable  id="listaProduct" value="#{productoController.listarProducto}" var="item"
+                                      selectionMode="single" selection="#{productoController.selected}"
+                                      paginator="true"
+                                      rowKey="#{item.idproducto}"
+                                      rows="10"
+                                      rowsPerPageTemplate="10,20,30"
+                                      >
+
+                            <p:ajax event="rowSelect"   update=" btnComprar " />
+                            <p:ajax event="rowUnselect" update=" btnComprar "/>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                                </f:facet>
+                                <h:outputText value="#{item.producto}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Presentacion"/>
+                                </f:facet>
+                                <h:outputText value="#{item.presentacion}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{mensajes.ListProductoTitle_unidad}"/>
+                                </f:facet>
+                                <h:outputText value="#{item.unidad}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="PVP"/>
+                                </f:facet>
+                                <h:outputText value="#{item.precioventa}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Stock"/>
+                                </f:facet>
+                                <h:outputText value="#{item.stock}"/>
+                            </p:column>
+
+<!--                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Imagen"/>
+                                </f:facet>-->
+<!--                                <h:outputText value=""/>
+                            </p:column>-->
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnComprar"   icon="ui-icon-search" value="Detalle" title="Detalle" 
+                                                 disabled="#{empty productoController.selected}"
+                                                 update=":formViewProduct" 
+                                                 oncomplete="PF('widViewProduct').show()" />
+                                
+                                <p:commandButton id="btnCreate" icon="ui-icon-plus"   value="Nuevo" title="Crear" 
+                                                 actionListener="#{productoController.prepareCreate}" 
+                                                 update=":formCreateProduct" 
+                                                 oncomplete="PF('widCreateProduct').show()"/>
+
+                                <p:commandButton id="btnEdit"   icon="ui-icon-pencil" value="Editar" title="Editar" 
+                                                 disabled="#{empty productoController.selected}" 
+                                                 update=":formEditProduct" 
+                                                 oncomplete="PF('widEditProduct').show()" />
+
+                                <p:commandButton id="btnView"   icon="ui-icon-search" value="Detalle" title="Detalle" 
+                                                 disabled="#{empty productoController.selected}"
+                                                 update=":formViewProduct" 
+                                                 oncomplete="PF('widViewProduct').show()" />
+                                
+
+                                <p:commandButton id="btnDelete" icon="ui-icon-trash"  value="Eliminar" title="Eliminar"
+                                                 disabled="#{empty productoController.selected}"
+                                                 update=":formBorrarProduct" 
+                                                 oncomplete="PF('widEraseProduct').show()" />
+                            </f:facet>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+                <p:dialog id="dlgCreateCateg" widgetVar="widCreateProduct" modal="true" resizable="false" 
+                          appendTo="@(body)" header="CREAR PRODUCTO" showEffect="explode" hideEffect="explode">
+
+                    <h:form id="formCreateProduct">
+                        <h:panelGroup id="display">
+                            <p:panelGrid id="pnlProduct" columns="2" rendered="#{productoController.selected != null}">
+
+                                <p:outputLabel value="Nombre: " for="producto" />
+                                <p:inputText id="producto" value="#{productoController.nombreProd}"  />
+
+                                <p:outputLabel value="Presentacion: " for="presentacion" />
+                                <p:selectOneMenu id="presentacion"
+                                                 value="#{productoController.selected.presentacion}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Caja" itemLabel="Caja"/>
+                                    <f:selectItem itemValue="Carton" itemLabel="Carton"/>
+                                    <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Unidad: " for="unidad" />
+                                <p:selectOneMenu id="unidad"
+                                                 value="#{productoController.selected.unidad}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
+                                    <f:selectItem itemValue="Kilo" itemLabel="Kilo"/>
+                                    <f:selectItem itemValue="Metro" itemLabel="Metro"/>
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel value="Moneda: " for="moneda" />
+                                <p:selectOneMenu id="moneda"
+                                                 value="#{productoController.selected.moneda}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Dolar" itemLabel="Dolar"/>
+                                    <f:selectItem itemValue="Euro" itemLabel="Euro"/>
+                                    <f:selectItem itemValue="Sol" itemLabel="Sol"/>
+                                    <f:selectItem itemValue="Pesos" itemLabel="Peso"/>
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel value="Cantidad: " for="cantidComp" />
+                                <p:inputText id="cantidComp" value="#{productoController.selected.stock}"/>
+
+                                <p:outputLabel value="Precio compra: " for="preciocompra" />
+                                <p:inputText id="preciocompra" value="#{productoController.selected.preciocompra}"/>
+
+                                <p:outputLabel value="Fecha caducidad: " for="fechavencimiento" />
+                                <p:calendar id="fechavencimiento" pattern="MM/dd/yyyy" value="#{productoController.selected.fechavencimiento}"  showOn="button"/>
+
+                                <p:outputLabel value="Categoria" for="idcategoria" />
+                                <p:selectOneMenu id="idcategoria" value="#{productoController.selected.idcategoria}" required="true" >
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItems value="#{categoriaController.itemsAvailableSelectOne}"
+                                                   var="idcategoriaItem"
+                                                   itemLabel="#{idcategoriaItem.categoria}"
+                                                   itemValue="#{idcategoriaItem}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Usuario: " for="idusuarios" />
+                                <p:selectOneMenu id="idusuarios" value="#{productoController.selected.idusuarios}" required="true" >
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                                   var="idusuariosItem"
+                                                   itemLabel="#{idusuariosItem.apellidos}"
+                                                   itemValue="#{idusuariosItem}"/>
+                                </p:selectOneMenu>
+
+                                
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"  
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListProduct:msmGrowl, :formListProduct:listaProduct"
+                                                 onclick="widCreateProduct.hide()"
+                                                 action="#{productoController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false"
+                                                 actionListener="#{productoController.create}"
+                                                 process="@this,pnlProduct" partialSubmit="true"
+                                                 update=":formListProduct:msmGrowl,formListProduct:listaProduct"
+                                                 oncomplete="PF('widCreateProduct').hide();">
+                                </p:commandButton>
+                            </p:fieldset>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgEditProduct" widgetVar="widEditProduct" modal="true" resizable="false" appendTo="@(body)" header="EDITAR PRODUCTO">
+                    <h:form id="formEditProduct">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{productoController.selected != null}">
+
+                                <p:outputLabel value="Codigo: " for="idproducto" />
+                                <p:inputText id="idproducto" value="#{productoController.selected.idproducto}" required="true" readonly="true"/>
+
+                                <p:outputLabel value="Nombre: " for="producto" />
+                                <p:inputText id="producto" value="#{productoController.selected.producto}" />
+                                
+                                <p:outputLabel value="Presentacion: " for="presentacion" />
+                                <p:selectOneMenu id="presentacion" value="#{productoController.selected.presentacion}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Saco" itemLabel="Saco"/>
+                                    <f:selectItem itemValue="Caja" itemLabel="Caja"/>
+                                    <f:selectItem itemValue="Carton" itemLabel="Carton"/>
+                                     <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
+                                    <f:selectItem itemValue="Pacas" itemLabel="Pacas"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Unidad: " for="unidad" />
+                                <p:selectOneMenu id="unidad" value="#{productoController.selected.unidad}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Kilo" itemLabel="Kilo"/>
+                                    <f:selectItem itemValue="Gramo" itemLabel="Caja"/>
+                                    <f:selectItem itemValue="Litro" itemLabel="Reporte"/>
+                                    <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
+                                    <f:selectItem itemValue="Galon" itemLabel="Galon"/>
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel value="Moneda: " for="moneda" />
+                                <p:selectOneMenu id="moneda" value="#{productoController.selected.moneda}">
+                                    <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
+                                    <f:selectItem itemValue="Dolar" itemLabel="Dolar"/>
+                                    <f:selectItem itemValue="Euro" itemLabel="Euro"/>
+                                    <f:selectItem itemValue="Sol" itemLabel="Sol"/>
+                                    <f:selectItem itemValue="Pesos" itemLabel="Peso"/>
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel value="Cantidad: " for="cantidComp" />
+                                <p:inputText id="cantidComp" value="#{productoController.selected.stock}"/>
+
+                                <p:outputLabel value="Precio compra: " for="preciocompra" />
+                                <p:inputText id="preciocompra" value="#{productoController.selected.preciocompra}" />
+
+                                <p:outputLabel value="Fecha caducidad: " for="fechavencimiento" />
+                                <p:calendar id="fechavencimiento" pattern="MM/dd/yyyy" value="#{productoController.selected.fechavencimiento}" showOn="button"/>
+
+                                <p:outputLabel value="Categoria: " for="idcategoria" />
+                                <p:selectOneMenu id="idcategoria" value="#{productoController.selected.idcategoria}" required="true">
+                                    <f:selectItem itemLabel="#{mensajes.SelectOneMessage}"/>
+                                    <f:selectItems value="#{categoriaController.itemsAvailableSelectOne}"
+                                                   var="idcategoriaItem"
+                                                   itemLabel="#{idcategoriaItem.categoria}"
+                                                   itemValue="#{idcategoriaItem}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Usuario: " for="idusuarios" />
+                                <p:selectOneMenu id="idusuarios" value="#{productoController.selected.idusuarios}" required="true" >
+                                    <f:selectItem itemLabel="#{mensajes.SelectOneMessage}"/>
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                                   var="idusuariosItem"
+                                                   itemLabel="#{idusuariosItem.apellidos}"
+                                                   itemValue="#{idusuariosItem}"/>
+                                </p:selectOneMenu>
+
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListProduct:msmGrowl, :formListProduct:listaProduct"
+                                                 onclick="widEditProduct.hide()"
+                                                 action="#{productoController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" actionListener="#{productoController.update}" 
+                                                 value="Guardar" update=":formListProduct:msmGrowl, :formListProduct:listaProduct" 
+                                                 oncomplete="PF('widEditProduct').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgViewClient" widgetVar="widViewProduct" modal="true" resizable="false" appendTo="@(body)" header="PRODUCTOS">
+                    <h:form id="formViewProduct">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{productoController.selected != null}">
+
+                                <h:outputText value="Codigo: "/>
+                                <h:outputText value="#{productoController.selected.idproducto}"/>
+
+                                <h:outputText value="Nombre: "/>
+                                <h:outputText value="#{productoController.selected.producto}" />
+
+                                <h:outputText value="Presentacion: "/>
+                                <h:outputText value="#{productoController.selected.presentacion}" />
+
+                                <h:outputText value="Unidad: "/>
+                                <h:outputText value="#{productoController.selected.unidad}" />
+
+                                <h:outputText value="Moneda: "/>
+                                <h:outputText value="#{productoController.selected.moneda}" />
+
+                                <h:outputText value="Precio compra: "/>
+                                <h:outputText value="#{productoController.selected.preciocompra}" />
+
+                                <h:outputText value="Precio venta: "/>
+                                <h:outputText value="#{productoController.selected.precioventa}"/>
+
+                                <h:outputText value="Stock: "/>
+                                <h:outputText value="#{productoController.selected.stock}" />
+
+                                <h:outputText value="Estado: "/>
+                                <p:selectBooleanCheckbox value="#{productoController.selected.estado}" disabled="true"/>
+
+<!--                                <h:outputText value="Imagen: "/>-->
+<!--                                <h:outputText value="" />-->
+
+                                <h:outputText value="Fecha caducidad: "/>
+                                <h:outputText value="#{productoController.selected.fechavencimiento}" >
+                                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                                </h:outputText>
+
+                                <h:outputText value="Categoria: "/>
+                                <h:outputText value="#{productoController.selected.idcategoria.categoria}" />
+
+                                <h:outputText value="Usuario: "/>
+                                <h:outputText value="#{productoController.selected.idusuarios.apellidos}" />
+
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cerrar" 
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListProduct:msmGrowl, :formListProduct:listaProduct"
+                                                 onclick="widViewProduct.hide()"
+                                                 action="#{productoController.limpiarObjeto()}"/>
+                            </p:fieldset>
+
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="dlgEraseClient" widgetVar="widEraseProduct" modal="true" resizable="false" 
+                          appendTo="@(body)" header="ELIMINAR PRODUCTO"
+                          showEffect="explode" hideEffect="explode">
+                    <h:form id="formBorrarProduct">
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="1" rendered="#{productoController.selected != null}">
+                                Esta seguro de eliminar el producto: 
+
+                                #{productoController.selected.producto}
+                            </p:panelGrid>
+                            <p:fieldset style="text-align: center; padding: 0px">
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" 
+                                                 process="@this" partialSubmit="true" 
+                                                 update=":formListProduct:msmGrowl, :formListProduct:listaProduct"
+                                                 onclick="widEraseProduct.hide()"
+                                                 action="#{productoController.limpiarObjeto()}"
+                                                 oncomplete="PF('widEraseProduct').hide();"/>
+
+                                <p:commandButton  icon="ui-icon-trash"
+                                                  actionListener="#{productoController.destroy()}" 
+                                                  process="@this" value="Eliminar" 
+                                                  oncomplete="PF('widEraseProduct').hide();"
+                                                  update=":formListProduct:msmGrowl, :formListProduct:listaProduct"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

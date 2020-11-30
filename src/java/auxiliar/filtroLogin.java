@@ -19,15 +19,44 @@ public class filtroLogin implements Serializable {
     public filtroLogin() {
     }
 
-    public void autenticacionUnica() {
+//    public void autenticacionUnica() {
+//        try {
+//            FacesContext context = FacesContext.getCurrentInstance();
+//            auUser = (Usuarios) context.getExternalContext().getSessionMap().get("usFiltro");
+//            if (auUser == null) {
+//                context.getExternalContext().redirect("./../../index.xhtml");
+//            }
+//        } catch (IOException ex) {
+//            LOG.log(Level.SEVERE, "Error", ex);
+//        }
+//    }
+    
+//    public void autenticacionUnica() {
+//        try {
+//            FacesContext context = FacesContext.getCurrentInstance();
+//            auUser = (Usuarios) context.getExternalContext().getSessionMap().get("usFiltro");
+//            if (auUser == null) {
+//                context.getExternalContext().redirect("/sysCompraVenta1.0.0/views/plantillas/index.xhtml");
+//            }
+//        } catch (IOException ex) {
+//            LOG.log(Level.SEVERE, "Error", ex);
+//        }
+//    }
+    
+        public void autenticacionUnica() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             auUser = (Usuarios) context.getExternalContext().getSessionMap().get("usFiltro");
             if (auUser == null) {
-                context.getExternalContext().redirect("./../../index.xhtml");
+                context.getExternalContext().redirect("./../index.xhtml");
             }
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error", ex);
         }
     }
+
+    public void serrarSecion() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+    }
+
 }

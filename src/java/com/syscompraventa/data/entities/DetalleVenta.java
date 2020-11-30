@@ -6,6 +6,7 @@
 package com.syscompraventa.data.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -56,6 +59,11 @@ public class DetalleVenta implements Serializable {
     @Size(max = 45)
     @Column(name = "total")
     private String total;
+    
+    @Column(name = "fecharemov")
+    @Temporal(TemporalType.DATE)
+    private Date fecharemov;
+    
     @JoinColumn(name = "idproducto", referencedColumnName = "idproducto")
     @ManyToOne(optional = false)
     private Producto idproducto;
@@ -163,6 +171,15 @@ public class DetalleVenta implements Serializable {
     public void setIdventas(Ventas idventas) {
         this.idventas = idventas;
     }
+
+    public Date getFecharemov() {
+        return fecharemov;
+    }
+
+    public void setFecharemov(Date fecharemov) {
+        this.fecharemov = fecharemov;
+    }
+    
 
     @Override
     public int hashCode() {

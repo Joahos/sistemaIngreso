@@ -2,6 +2,7 @@ package com.syscompraventa.business.facade;
 
 import com.syscompraventa.data.entities.Compras;
 import com.syscompraventa.data.entities.DetalleCompra;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -40,12 +41,24 @@ public class DetalleCompraFacade extends AbstractFacade<DetalleCompra> {
         q.setParameter("idComp", idCompr);
         return q.getResultList();
     }
-//
-//    public void borradoLogXCompra(Compras idProduct) throws Exception {
-//        String jpql = "update DetalleCompra d set d.estado=false where d.idcompras=:p1";
-//        Query q = em.createQuery(jpql);
-//        q.setParameter("p1", idProduct);
-//        q.executeUpdate();
-//    }
+
+    public void borradoLogXCompra(Compras idProduct) throws Exception {
+        String jpql = "update DetalleCompra d set d.estado=false where d.idcompras=:p1";
+        Query q = em.createQuery(jpql);
+        q.setParameter("p1", idProduct);
+        q.executeUpdate();
+    }
+    
+    public List<DetalleCompra> listarCompraStdTotal() throws Exception {
+        String jpql = "SELECT d FROM DetalleCompra d WHERE d.estado = TRUE";
+        Query q = em.createQuery(jpql);
+        return q.getResultList();
+    }
+    
+    public List<DetalleCompra> listarCompraStdCancel() throws Exception {
+        String jpql = "SELECT d FROM DetalleCompra d WHERE d.estado = FALSE";
+        Query q = em.createQuery(jpql);
+        return q.getResultList();
+    }
 
 }

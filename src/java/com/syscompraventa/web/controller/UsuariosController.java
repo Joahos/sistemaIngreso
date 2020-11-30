@@ -142,6 +142,7 @@ public class UsuariosController implements Serializable {
     }
 
     public void update() {
+        usuarioActual.setIdpermisos(perm);
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/mensajes").getString("UsuariosUpdated"));
     }
 

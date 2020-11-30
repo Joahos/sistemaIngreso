@@ -1,5 +1,6 @@
 package com.syscompraventa.data.entities;
 
+import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
@@ -8,6 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(DetalleCompra.class)
 public abstract class DetalleCompra_ {
 
+	public static volatile SingularAttribute<DetalleCompra, Date> fechaadd;
 	public static volatile SingularAttribute<DetalleCompra, String> unidad;
 	public static volatile SingularAttribute<DetalleCompra, Boolean> estado;
 	public static volatile SingularAttribute<DetalleCompra, String> total;

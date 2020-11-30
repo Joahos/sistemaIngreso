@@ -330,6 +330,9 @@ public class ComprasController implements Serializable {
         listCompras = comprasFacade.listarProductosXMes(mes);
 
     }
+
+
+
     //{
 //
 //    public void eraseLog() {
@@ -344,7 +347,6 @@ public class ComprasController implements Serializable {
 //        }
 //
 //    }
-
     //}
     public String getMes() {
         return mes;

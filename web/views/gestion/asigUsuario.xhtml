@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../menuPrincipal.xhtml">
+
+            <ui:define name="content">
+
+
+                <h:form id="formListUser">
+                    <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="6000"/>
+
+                    <p:panel header="Nomina de usuarios " >
+                        <!--                        <p:panelGrid id="pnlMostrarPersona" columns="3" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4,ui-g-12 ui-md-4" >-->
+
+                        <p:dataTable  id="nominaUser" value="#{usuariosController.listaUsuarios}" var="varUs"
+                                      selectionMode="single" selection="#{usuariosController.usuarioActual}"
+                                      paginator="true"
+                                      rowKey="#{varUs.idusuarios}"
+                                      rows="10"
+                                      rowsPerPageTemplate="10,20,30"
+                                      >
+
+                            <p:ajax event="rowSelect"   update=" btnEdit btnDelete"/>
+                            <p:ajax event="rowUnselect" update=" btnEdit btnDelete"/>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="Cedula"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.cedula}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombres"/>
+                                </f:facet>
+                                <h:outputText value="#{ varUs.apellidos}    #{varUs.nombres}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="Telefono"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.telefono}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Correo"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.correo}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Direccion"/>
+                                </f:facet>
+                                <h:outputText value="#{varUs.direccion}"/>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnEdit"   icon="ui-icon-pencil" value="Reasignar" title="Reasignar" 
+                                                 disabled="#{empty usuariosController.usuarioActual}" 
+                                                 update=":formEditUser" 
+                                                 oncomplete="PF('widEditUser').show()" />
+
+                                <p:commandButton id="btnDelete" icon="ui-icon-trash"  value="Suspender" title="Suspender"
+                                                 disabled="#{empty usuariosController.usuarioActual}"
+                                                 update=":formBorrarUser" 
+                                                 oncomplete="PF('widEraseUser').show()" />
+
+                            </f:facet>
+
+                        </p:dataTable>
+                        <!--                            </p:panelGrid>-->
+                    </p:panel>
+                </h:form>
+
+                <p:dialog id="UsuariosEditDlg" widgetVar="widEditUser" modal="true" resizable="false" appendTo="@(body)" header="REASIGNAR PERMISOS">
+                    <h:form id="formEditUser">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" rendered="#{usuariosController.usuarioActual != null}">
+
+                                <p:outputLabel value="Cedula" for="cedula" />
+                                <p:inputText id="cedula" value="#{usuariosController.usuarioActual.cedula}" title="Cedula" 
+                                             readonly="true"/>
+
+                                <p:outputLabel value="Nombre" for="nombre" />
+                                <p:inputText id="nombre" value="#{usuariosController.usuarioActual.apellidos}" title="Direccion"
+                                             readonly="true"/>
+
+                                <p:outputLabel value="Nuevo cargo" for="idPermisos" />
+                                <p:selectOneMenu id="idPermisos" value="#{usuariosController.perm}" required="true" >
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne2}"
+                                                   var="idPerm"
+                                                   itemLabel="#{idPerm.nombre}"
+                                                   itemValue="#{idPerm}"
+                                                   />    
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+
+                            <p:fieldset style="text-align: center; padding: 0px"> 
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar"
+                                                 process="@this" partialSubmit="true"
+                                                 update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                 onclick="PF('widEditUser').hide()"
+                                                 action="#{usuariosController.limpiarObjeto()}"/>
+
+                                <p:commandButton icon="ui-icon-disk" actionListener="#{usuariosController.update}" 
+                                                 value="Guardar" update=":formListUser:msmGrowl, :formListUser:nominaUser" 
+                                                 oncomplete="PF('widEditUser').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="formEraseUser" widgetVar="widEraseUser" modal="true" resizable="false" 
+                          appendTo="@(body)" header="SUSPENDER USUARIO"
+                          showEffect="explode" hideEffect="explode">
+                    <h:form id="formBorrarUser">
+                        <h:panelGroup id="display" >
+                            <p:panelGrid columns="1" rendered="#{usuariosController.usuarioActual != null}">
+                                Esta seguro de eliminar el usuario: 
+
+                                #{usuariosController.usuarioActual.apellidos}
+                            </p:panelGrid>
+                            <p:fieldset style="text-align: center; padding: 0px">
+                                <p:commandButton icon=" ui-icon-close" value="Cancelar" 
+                                                 process="@this" partialSubmit="true" 
+                                                 update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                 onclick="widEraseUser.hide()"
+                                                 action="#{usuariosController.limpiarObjeto()}"/>
+
+                                <p:commandButton  icon="ui-icon-trash"
+                                                  actionListener="#{usuariosController.eraseLog()}" 
+                                                  value="Eliminar" update=":formListUser:msmGrowl, :formListUser:nominaUser"
+                                                  oncomplete="PF('widEraseUser').hide();"/>
+                            </p:fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

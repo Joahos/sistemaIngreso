@@ -14,7 +14,6 @@ public abstract class Producto_ {
 	public static volatile SingularAttribute<Producto, Boolean> estado;
 	public static volatile SingularAttribute<Producto, Usuarios> idusuarios;
 	public static volatile SingularAttribute<Producto, String> presentacion;
-	public static volatile SingularAttribute<Producto, byte[]> imagen;
 	public static volatile SingularAttribute<Producto, String> preciocompra;
 	public static volatile SingularAttribute<Producto, Categoria> idcategoria;
 	public static volatile SingularAttribute<Producto, String> producto;

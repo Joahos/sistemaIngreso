@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:event type="preRenderView" listener="#{filtroLogin.autenticacionUnica()}" />
+            <f:facet name="first"> 
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Compras-Ventas</title>
+                <h:outputStylesheet name="/css/personalizado.css"/>
+                <link rel="shortcut icon" href="./../resources/img/logo.png" type="./../resources/image/x-icon"/>
+
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+
+                <p:layoutUnit style="font-size: 25px"  position="north" resizable="true" closable="true" collapsible="true" class="NortSout">
+                    COMPRAS - VENTAS
+                </p:layoutUnit>
+
+                <p:layoutUnit style="font-size: 12px" position="south"  closable="true" collapsible="true" class="NortSout">
+                    &copy; 2019 COMPRAS - VENTAS
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" header="MENU" collapsible="true"  >
+                    <h:form class="formMenu">
+                        <p:slideMenu style="width:190px;">
+                            <p:submenu label="PRODUCTOS" icon="ui-icon-bookmark" >
+                                <p:menuitem value="Productos" outcome="/views/producto/producto.xhtml" />
+                            </p:submenu>
+
+                        </p:slideMenu>
+
+                        <p:menu style="width:180px">
+                            <p:submenu  >
+                                <p:menuitem value=" Cerrar Sesion" icon="ui-icon-power" action="#{filtroLogin.serrarSecion()}" />
+                            </p:submenu>
+                        </p:menu>
+
+
+                    </h:form>
+
+                    <f:facet name="footer">
+                        <p:growl id="msmGrowl" showSummary="true" showDetail="true" life="6000"/>
+                        <h:form id="footInfo">
+                            <p:commandButton value="Hola: #{loginController.usuarioLogeado.apellidos}" >
+                                <p:ajax event="click"  oncomplete="PF('widEditUser').show()" />
+                            </p:commandButton>
+                        </h:form>
+
+                        <p:dialog id="UsuariosEditDlgmP" widgetVar="widEditUser" modal="true" resizable="false" appendTo="@(body)" header="EDITAR USUARIO">
+                            <h:form id="formEditUsermP">
+                                <h:panelGroup id="display">
+                                    <p:panelGrid columns="2" rendered="#{loginController.usActualizando != null}">
+
+                                        <p:outputLabel value="Cedula" for="cedula" />
+                                        <p:inputText id="cedula" value="#{loginController.usActualizando.cedula}" title="Cedula" 
+                                                     readonly="true"/>
+
+                                        <p:outputLabel value="Nombres" for="nombres" />
+                                        <p:inputText id="nombres" value="#{loginController.usActualizando.nombres}" title="Nombres" />
+
+                                        <p:outputLabel value="Apellidos" for="apellidos" />
+                                        <p:inputText id="apellidos" value="#{loginController.usActualizando.apellidos}" title="Apellidos" />
+
+                                        <p:outputLabel value="Telefono" for="telefono" />
+                                        <p:inputText id="telefono" value="#{loginController.usActualizando.telefono}" title="Telefono" />
+
+                                        <p:outputLabel value="Correo" for="correo" />
+                                        <p:inputText id="correo" value="#{loginController.usActualizando.correo}" title="Correo" />
+
+                                        <p:outputLabel value="Direccion" for="direccion" />
+                                        <p:inputText id="direccion" value="#{loginController.usActualizando.direccion}" title="Direccion" />
+
+                                        <p:outputLabel value="Usuario" for="usuario" />
+                                        <p:inputText id="usuario" value="#{loginController.usActualizando.usuario}" title="Direccion" />
+
+                                        <p:outputLabel value="Contraseña anterior: " for="passAnt" />
+                                        <p:password id="passAnt" value="#{loginController.usActualizando.paswword}" title="Direccion" />
+
+
+                                        <h:outputLabel value="Nueva contraseña: " for="passNew"/>
+                                        <p:password id="passNew" value="#{loginController.contrasenia}" feedback="true" 
+                                                    promptLabel="Vacio" weakLabel="Debil" goodLabel="Medio" strongLabel="Fuerte"
+                                                    required="true"/>
+
+                                        <p:outputLabel value="Repita contraseña: " for="passNew2" />
+                                        <p:password id="passNew2" value="#{loginController.contrasenia2}" feedback="true" 
+                                                    promptLabel="Vacio" weakLabel="Debil" goodLabel="Medio" strongLabel="Fuerte"
+                                                    required="true"/>
+                                    </p:panelGrid>
+
+                                    <p:fieldset style="text-align: center; padding: 0px"> 
+                                        <p:commandButton icon=" ui-icon-close" value="Cancelar"
+                                                         process="@this" partialSubmit="true"
+                                                         onclick="widEditUser.hide()"
+                                                         update="msmGrowl,footInfo,formEditUsermP"
+                                                         action="#{usuariosController.limpiarObjeto()}"/>
+
+                                        <p:commandButton icon="ui-icon-disk" actionListener="#{loginController.actualizarUserPass()}" 
+                                                         value="Guardar" update="msmGrowl,footInfo,formEditUsermP"
+                                                         oncomplete="PF('widEditUser').hide();"/>
+                                    </p:fieldset>
+                                </h:panelGroup>
+                            </h:form>
+                        </p:dialog>
+
+                    </f:facet>
+
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+
+                    <ui:insert name="content">
+                        <h:form id="usrr">
+                        </h:form>
+                    </ui:insert>
+
+                </p:layoutUnit>
+
+            </p:layout>
+        </h:body>
+
+    </f:view>
+
+</html>

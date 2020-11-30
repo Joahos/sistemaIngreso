@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class validations {
+    
 
     public static String sha512(String cadena) {
         StringBuilder sb = new StringBuilder();

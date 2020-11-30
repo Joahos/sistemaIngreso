@@ -110,22 +110,18 @@
                                 <p:selectOneMenu id="presentacion"
                                                  value="#{productoController.selected.presentacion}">
                                     <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
-                                    <f:selectItem itemValue="Saco" itemLabel="Saco"/>
                                     <f:selectItem itemValue="Caja" itemLabel="Caja"/>
                                     <f:selectItem itemValue="Carton" itemLabel="Carton"/>
                                     <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
-                                    <f:selectItem itemValue="Pacas" itemLabel="Pacas"/>
                                 </p:selectOneMenu>
 
                                 <p:outputLabel value="Unidad: " for="unidad" />
                                 <p:selectOneMenu id="unidad"
                                                  value="#{productoController.selected.unidad}">
                                     <f:selectItem itemLabel="___.- SELECCIONE -.___"/>
-                                    <f:selectItem itemValue="Kilo" itemLabel="Kilo"/>
-                                    <f:selectItem itemValue="Gramo" itemLabel="Caja"/>
-                                    <f:selectItem itemValue="Litro" itemLabel="Litro"/>
                                     <f:selectItem itemValue="Unidad" itemLabel="Unidad"/>
-                                    <f:selectItem itemValue="Galon" itemLabel="Galon"/>
+                                    <f:selectItem itemValue="Kilo" itemLabel="Kilo"/>
+                                    <f:selectItem itemValue="Metro" itemLabel="Metro"/>
                                 </p:selectOneMenu>
                                 
                                 <p:outputLabel value="Moneda: " for="moneda" />

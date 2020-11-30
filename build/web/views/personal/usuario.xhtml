@@ -102,7 +102,7 @@
                             <p:panelGrid id="pnlPersona" columns="2" rendered="#{usuariosController.usuarioActual != null}">
 
                                 <p:outputLabel value="Cedula" for="cedula" />
-                                <p:inputText id="cedula" value="#{usuariosController.usuarioActual.cedula}" title="Cedula" >
+                                <p:inputText id="cedula" value="#{usuariosController.usuarioActual.cedula}" title="Cedula" converter="#{Integer}" >
                                     <p:ajax listener="#{usuariosController.validarCedula()}" />
                                 </p:inputText>
 
@@ -205,8 +205,17 @@
                                 <p:outputLabel value="Direccion" for="direccion" />
                                 <p:inputText id="direccion" value="#{usuariosController.usuarioActual.direccion}" title="Direccion" />
 
-                                <p:outputLabel value="Cargo" for="cargo" />
+                                <p:outputLabel value="Estado" for="cargo" />
                                 <p:selectBooleanCheckbox id="cargo" value="#{usuariosController.usuarioActual.cargo}" />
+                                
+                                <p:outputLabel value="Cargo" for="idPermisos" />
+                                <p:selectOneMenu id="idPermisos" value="#{usuariosController.perm}" >
+                                    <f:selectItems value="#{usuariosController.itemsAvailableSelectOne2}"
+                                                   var="idPerm"
+                                                   itemLabel="#{idPerm.nombre}"
+                                                   itemValue="#{idPerm}"
+                                                   />    
+                                </p:selectOneMenu>
 
                                 <p:outputLabel value="Fecha de ingreso" for="fechaingreso" />
                                 <p:calendar id="fechaingreso" pattern="MM/dd/yyyy" value="#{usuariosController.usuarioActual.fechaingreso}" title="Fecha de Ingreso"  showOn="button"/>

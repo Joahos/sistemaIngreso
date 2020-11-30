@@ -11,9 +11,9 @@
             <f:facet name="first">
                 <f:event type="preRenderView" listener="#{filtroLogin.autenticacionUnica()}" />
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>Compras-Ventas</title>
+                <title>Integracion-TecnoInformatico</title>
                 <h:outputStylesheet name="/css/personalizado.css"/>
-
+                <link rel="shortcut icon" href="./../resources/img/logo.jpg" type="./../resources/image/x-icon"/>
             </f:facet>
         </h:head>
 
@@ -21,11 +21,11 @@
             <p:layout fullPage="true">
 
                 <p:layoutUnit style="font-size: 25px"  position="north" resizable="true" closable="true" collapsible="true" class="NortSout">
-                    COMPRAS - VENTAS
+                    INTEGRACION - TECNOINFORMATICO
                 </p:layoutUnit>
 
                 <p:layoutUnit style="font-size: 12px" position="south"  closable="true" collapsible="true" class="NortSout">
-                    &copy; 2019 COMPRAS - VENTAS
+                    &copy; 2020 INTEGRACION - TECNOINFORMATICO
                 </p:layoutUnit>
 
                 <p:layoutUnit position="west" header="MENU" collapsible="true"  >
@@ -34,44 +34,45 @@
                             <p:submenu label=" PERSONAL"  icon="ui-icon-person">
                                 <p:menuitem value="Usuarios" outcome="/views/personal/usuario.xhtml" />
                                 <p:menuitem value="Clientes" outcome="/views/personal/cliente.xhtml" />
-                                <p:menuitem value="Proveedores" outcome="/views/gestion/proveedores.xhtml" /> 
+                                <p:menuitem value="Proveedores" outcome="/views/personal/proveedores.xhtml" /> 
                             </p:submenu>
                             <p:submenu label="PRODUCTOS" icon="ui-icon-bookmark" >
                                 <p:menuitem value="Productos" outcome="/views/producto/producto.xhtml" />
                                 <p:menuitem value="Categorias" outcome="/views/producto/categoria.xhtml" />
                             </p:submenu>
 
-                            <p:submenu label=" COMPRAS" icon="ui-icon-cart" >
+                            <p:submenu label="COMPRAS" icon="ui-icon-cart" >
                                 <p:menuitem value="Compra" outcome="/views/compras/compra.xhtml" />
-                                <p:menuitem value="Consultas" outcome="/views/compras/reportesCompra.xhtml" /> 
-                                <p:menuitem value="Administracion" outcome="/views/compras/gestionarCompras.xhtml" /> 
+                                <p:menuitem value="Consultas" outcome="/views/compras/consultaCompra.xhtml" /> 
+                                <p:menuitem value="Administracion" outcome="/views/compras/gestionCompras.xhtml" /> 
                             </p:submenu>
                             <p:submenu label="VENTAS" icon="ui-icon-tag">
                                 <p:menuitem value="Ventas" outcome="/views/ventas/ventas.xhtml" />
-                                <p:menuitem value="Consultas" outcome="/views/ventas/reportesVentas.xhtml" /> 
-                                <p:menuitem value="Administracion" outcome="/views/ventas/gestionarVentas.xhtml" />
-                            </p:submenu>
-                            <p:submenu label="REPORTES VENTA" icon="ui-icon-clipboard">
-                                <p:menuitem value="Ventas" url="#"/> 
-                                <p:menuitem value="Mensuales" url="#" /> 
-                                <p:menuitem value="Clientes" url="#" /> 
+                                <p:menuitem value="Consultas" outcome="/views/ventas/consultaVentas.xhtml" /> 
+                                <p:menuitem value="Administracion" outcome="/views/ventas/gestionVentas.xhtml" />
                             </p:submenu>
                             <p:submenu label="REPORTES COMPRA" icon="ui-icon-clipboard">
-                                <p:menuitem value="Compras" url="#" />
+                                <p:menuitem value="Compras" outcome="/views/estadistica/rptCompra.xhtml"/>
                                 <p:menuitem value="Mensuales" url="#" /> 
                                 <p:menuitem value="Proveedores" url="#" /> 
+                            </p:submenu>
+                            <p:submenu label="REPORTES VENTA" icon="ui-icon-clipboard">
+                                <p:menuitem value="Ventas" outcome="/views/estadistica/rptVenta.xhtml"/> 
+                                <p:menuitem value="Mensuales" url="#" /> 
+                                <p:menuitem value="Clientes" url="#" /> 
                             </p:submenu>
                             <p:submenu label="GESTION" icon="ui-icon-wrench">
                                 <p:menuitem value="Persona" outcome="/views/gestion/personal.xhtml" />
                                 <p:menuitem value="Producto" outcome="/views/gestion/articulos.xhtml" /> 
                                 <p:menuitem value="Empresa" outcome="/views/gestion/empresa.xhtml" /> 
                                 <p:menuitem value="Permisos" outcome="/views/gestion/permisos.xhtml" /> 
+                                <p:menuitem value="Asignar permisos" outcome="/views/gestion/asigUsuario.xhtml" /> 
                             </p:submenu>
                         </p:slideMenu>
 
                         <p:menu style="width:180px">
                             <p:submenu  >
-                                <p:menuitem value=" Cerrar Sesion" icon="ui-icon-power" action="#{loginController.cerrarSesion()}" />
+                                <p:menuitem value=" Cerrar Sesion" icon="ui-icon-power" action="#{filtroLogin.serrarSecion()}" />
                             </p:submenu>
                         </p:menu>
 

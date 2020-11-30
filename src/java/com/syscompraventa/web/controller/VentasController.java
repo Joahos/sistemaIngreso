@@ -34,6 +34,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.view.ViewScoped;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.chart.PieChartModel;
 
 @Named("ventasController")
 @ViewScoped
@@ -52,6 +53,7 @@ public class VentasController implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(VentasController.class.getName());
     DecimalFormat des = new DecimalFormat("#0.00");
+    
 
     private List<Ventas> items;
     private List<Ventas> listVentas;
@@ -299,6 +301,8 @@ public class VentasController implements Serializable {
         listVentas = ventasFacade.listarProductosXMes(mes);
 
     }
+    
+
 
     //{
     public void eraseLog() {
